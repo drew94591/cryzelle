@@ -1,5 +1,5 @@
 streamlit
 sqlalchemy
-yaml
-jwt
+pyyaml
+pyjwt
 bcrypt
