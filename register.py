@@ -19,6 +19,8 @@ authenticator = stauth.Authenticate(
 
 try:
     if authenticator.register_user('Register user', preauthorization=False):
-        st.success('User registered successfully')
+        st.success('User registered successfully!')
+        st.markdown('<a href="https://drew94591-cryzelle-app-xwfwnb.streamlitapp.com" target="_self">Login</a>',
+                    unsafe_allow_html=True)
 except Exception as e:
     st.error(e)
