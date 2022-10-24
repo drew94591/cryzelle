@@ -1,0 +1,5 @@
+streamlit
+sqlalchemy
+yaml
+jwt
+bcrypt
