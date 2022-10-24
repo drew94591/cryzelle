@@ -78,7 +78,7 @@ def main():
         elif authentication_status == None:
             st.warning('Please enter your username and password')
 
-        col1, col2 = st.columns([1, 1])
+        col1, col2, col3 = st.columns([1, 1, 1])
 
         with col1:
             if st.button('Forgot Password'):
@@ -111,6 +111,9 @@ def main():
                         st.error('Email not found')
                 except Exception as e:
                     st.error(e)
+        with col3:
+            st.markdown(
+                '<a href="https://drew94591-cryzelle-register-ytjnoc.streamlitapp.com" target="_self">Not Registered?</a>', unsafe_allow_html=True)
     else:
         set_left_nav()
 
