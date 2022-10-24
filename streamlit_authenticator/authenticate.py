@@ -49,6 +49,12 @@ class Authenticate:
             st.session_state['authentication_status'] = None
         if 'username' not in st.session_state:
             st.session_state['username'] = None
+        if 'email' not in st.session_state:
+            st.session_state['email'] = None
+        if 'phone_number' not in st.session_state:
+            st.session_state['phone_number'] = None
+        if 'wallet_address' not in st.session_state:
+            st.session_state['wallet_address'] = None
         if 'logout' not in st.session_state:
             st.session_state['logout'] = None
 
