@@ -4,4 +4,4 @@ sqlalchemy
 pyyaml
 pyjwt
 bcrypt
-w3
+web3
