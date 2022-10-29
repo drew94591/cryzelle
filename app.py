@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml import SafeLoader
-from apps import account, sms, transaction
+from apps import home_page, accounts, loans, sms_util, transactions
 
 st.set_page_config(
     page_title="Login",
@@ -27,13 +27,18 @@ authenticator = stauth.Authenticate(
 
 def set_left_nav():
     authenticator.logout("Logout", "sidebar")
+    account = accounts.Account()
+    account.search("Search", "sidebar")
+    trx = transactions.Transaction()
+
     choice = st.sidebar.selectbox(
-        "Navigation", ["Home", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Search", "Introduce Cryzelle"])
+        "Navigation", ["Home", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Loan Information", "Refer A Friend!"])
     if choice == "Home":
-        account.home()
+        home = home_page.Home()
+        home.page()
+        st.session_state['search'] == None
     elif choice == "My Account":
         account.details()
-
         # Creating an update account details widget
         try:
             if authenticator.update_account_details(st.session_state['username'], 'Account Details'):
@@ -47,16 +52,17 @@ def set_left_nav():
                     st.success('Password modified successfully')
             except Exception as e:
                 st.error(e)
-
     elif choice == "Transaction History":
-        transaction.history()
+        trx.history()
     elif choice == "Send Cryptocurrency":
-        transaction.send()
+        trx.send()
     elif choice == "Request Cryptocurrency":
-        transaction.request()
-    elif choice == "Search":
-        account.search()
-    elif choice == "Introduce Cryzelle":
+        trx.request()
+    elif choice == "Loan Information":
+        loan = loans.Loan()
+        loan.details()
+    elif choice == "Refer A Friend!":
+        sms = sms_util.SMS()
         sms.invite()
 
 

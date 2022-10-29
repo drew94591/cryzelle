@@ -57,6 +57,8 @@ class Authenticate:
             st.session_state['wallet_address'] = None
         if 'logout' not in st.session_state:
             st.session_state['logout'] = None
+        if 'search' not in st.session_state:
+            st.session_state['search'] = None
 
     def _token_encode(self) -> str:
         """
