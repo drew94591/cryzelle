@@ -6,17 +6,17 @@ w3 = Web3(Web3.HTTPProvider('HTTP://52.87.239.109:8545'))
 class Home:
     def page(self):
         st.title(f'Welcome *{st.session_state["name"]}*')
-        # st.write(w3.eth.get_block(0))
+        st.write(w3.eth.get_block(0))
 
         # Get Balance of address in Wei
-        # wei_balance = w3.eth.get_balance(
-        #    '0x77649188307aE2aEEa5e2A64aC3BDc85e842ab4f')
+        wei_balance = w3.eth.get_balance(
+            '0x77649188307aE2aEEa5e2A64aC3BDc85e842ab4f')
 
         # Convert Wei value to ether
-        #ether_amount = w3.fromWei(wei_balance, "ether")
+        ether_amount = w3.fromWei(wei_balance, "ether")
 
         st.write(f'User Name: {st.session_state["username"]}')
         st.write(f'Email: {st.session_state["email"]}')
         st.write(f'Phone Number: {st.session_state["phone_number"]}')
         st.write(f'Wallet Address: {st.session_state["wallet_address"]}')
-        #st.write(f'Wallet Balance: {wei_balance} Wei')
+        st.write(f'Wallet Balance: {wei_balance} Wei')
