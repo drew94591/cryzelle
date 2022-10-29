@@ -1,6 +1,6 @@
 import streamlit as st
 from web3 import Web3
-#w3 = Web3(Web3.HTTPProvider('HTTP://52.87.239.109:8545'))
+w3 = Web3(Web3.HTTPProvider('HTTP://52.87.239.109:8545'))
 
 
 class Home:
