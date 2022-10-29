@@ -16,12 +16,15 @@ class Account:
     def update(self):
         st.write('In Account Update Page...')
 
-    def search(self, button_name: str, location: str = 'main'):
+    def search(self, control_name: str, location: str = 'main'):
         if location == 'main':
-            st.write('In Search Main Page...')
-            if st.button(button_name):
-                st.write('Search button clicked!')
+            input_val = st.text_input("Enter a phone number or email address")
+
+            if st.button(control_name):
+                st.write(f"Value of input string: {input_val}")
+
         elif location == 'sidebar':
-            st.sidebar.text_input("Enter a phone number or email address")
-            if st.sidebar.button(button_name):
-                st.write('Search button clicked!')
+            input_val = st.sidebar.text_input(
+                "Enter a phone number or email address")
+            if st.sidebar.checkbox(control_name):
+                st.write(f"Value of input string: {input_val}")

@@ -28,15 +28,16 @@ authenticator = stauth.Authenticate(
 def set_left_nav():
     authenticator.logout("Logout", "sidebar")
     account = accounts.Account()
-    account.search("Search", "sidebar")
+    #account.search("Search", "sidebar")
     trx = transactions.Transaction()
 
     choice = st.sidebar.selectbox(
-        "Navigation", ["Home", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Loan Information", "Refer A Friend!"])
+        "Navigation", ["Home", "Search", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Loan Information", "Refer A Friend!"])
     if choice == "Home":
         home = home_page.Home()
         home.page()
-        st.session_state['search'] == None
+    elif choice == "Search":
+        account.search("Find", "main")
     elif choice == "My Account":
         account.details()
         # Creating an update account details widget
