@@ -33,12 +33,10 @@ def set_left_nav():
     trx = transaction.Transaction()
 
     choice = st.sidebar.selectbox(
-        "Navigation", ["Home", "Search", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Loan Details", "Refer A Friend!"])
+        "Navigation", ["Home", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Loan Details", "Find A Friend", "Invite A Friend!"])
     if choice == "Home":
         home = home_page.Home()
         home.page()
-    elif choice == "Search":
-        current_user.search("Find", "main")
     elif choice == "My Account":
         users_account.details()
         # Creating an update account details widget
@@ -63,7 +61,9 @@ def set_left_nav():
     elif choice == "Loan Details":
         users_loan = loan.Loan()
         users_loan.details()
-    elif choice == "Refer A Friend!":
+    elif choice == "Find A Friend":
+        current_user.search("Find", "main")
+    elif choice == "Invite A Friend!":
         sms = sms_util.SMS()
         sms.invite()
 

@@ -45,6 +45,10 @@ class Authenticate:
 
         if 'name' not in st.session_state:
             st.session_state['name'] = None
+        if 'first_name' not in st.session_state:
+            st.session_state['first_name'] = None
+        if 'last_name' not in st.session_state:
+            st.session_state['last_name'] = None
         if 'authentication_status' not in st.session_state:
             st.session_state['authentication_status'] = None
         if 'username' not in st.session_state:
@@ -147,7 +151,8 @@ class Authenticate:
             try:
                 if self._check_pw():
                     if inplace:
-                        st.session_state['name'] = self.credentials['usernames'][self.username]['name']
+                        st.session_state['first_name'] = self.credentials['usernames'][self.username]['first_name']
+                        st.session_state['last_name'] = self.credentials['usernames'][self.username]['last_name']
                         st.session_state['email'] = self.credentials['usernames'][self.username]['email']
                         st.session_state['phone_number'] = self.credentials['usernames'][self.username]['phone_number']
                         st.session_state['wallet_address'] = self.credentials['usernames'][self.username]['wallet_address']
@@ -230,6 +235,8 @@ class Authenticate:
                 self.cookie_manager.delete(self.cookie_name)
                 st.session_state['logout'] = True
                 st.session_state['name'] = None
+                st.session_state['first_name'] = None
+                st.session_state['last_name'] = None
                 st.session_state['username'] = None
                 st.session_state['authentication_status'] = None
         elif location == 'sidebar':
@@ -237,6 +244,8 @@ class Authenticate:
                 self.cookie_manager.delete(self.cookie_name)
                 st.session_state['logout'] = True
                 st.session_state['name'] = None
+                st.session_state['first_name'] = None
+                st.session_state['last_name'] = None
                 st.session_state['username'] = None
                 st.session_state['authentication_status'] = None
 
@@ -304,7 +313,7 @@ class Authenticate:
             else:
                 raise CredentialsError
 
-    def _register_credentials(self, username: str, name: str, password: str, email: str, phone_number: str, preauthorization: bool):
+    def _register_credentials(self, username: str, first_name: str, last_name: str, password: str, email: str, phone_number: str, preauthorization: bool):
         """
         Adds to credentials dictionary the new user's information.
 
@@ -312,8 +321,10 @@ class Authenticate:
         ----------
         username: str
             The username of the new user.
-        name: str
-            The name of the new user.
+        first_name: str
+            The first name of the new user.
+        last_name: str
+            The last name of the new user.
         password: str
             The password of the new user.
         email: str
@@ -324,7 +335,8 @@ class Authenticate:
             The preauthorization requirement, True: user must be preauthorized to register, 
             False: any user can register.
         """
-        self.credentials['usernames'][username] = {'name': name,
+        self.credentials['usernames'][username] = {'first_name': first_name,
+                                                   'last_name': last_name,
                                                    'password': Hasher([password]).generate()[0], 'email': email, 'phone_number': phone_number}
         if preauthorization:
             self.preauthorized['emails'].remove(email)
@@ -360,27 +372,28 @@ class Authenticate:
         new_email = register_user_form.text_input('Email')
         new_phone_number = register_user_form.text_input('Phone_Number')
         new_username = register_user_form.text_input('Username').lower()
-        new_name = register_user_form.text_input('Name')
+        new_first_name = register_user_form.text_input('First_Name')
+        new_last_name = register_user_form.text_input('Last_Name')
         new_password = register_user_form.text_input(
             'Password', type='password')
         new_password_repeat = register_user_form.text_input(
             'Repeat password', type='password')
 
         if register_user_form.form_submit_button('Register'):
-            if len(new_email) and len(new_phone_number) and len(new_username) and len(new_name) and len(new_password) > 0:
+            if len(new_email) and len(new_phone_number) and len(new_username) and len(new_first_name) and len(new_last_name) and len(new_password) > 0:
                 if new_username not in self.credentials['usernames']:
                     if new_password == new_password_repeat:
                         if preauthorization:
                             if new_email in self.preauthorized['emails']:
                                 self._register_credentials(
-                                    new_username, new_name, new_password, new_email, new_phone_number, preauthorization)
+                                    new_username, new_first_name, new_last_name, new_password, new_email, new_phone_number, preauthorization)
                                 return True
                             else:
                                 raise RegisterError(
                                     'User not preauthorized to register')
                         else:
                             self._register_credentials(
-                                new_username, new_name, new_password, new_email, new_phone_number, preauthorization)
+                                new_username, new_first_name, new_last_name, new_password, new_email, new_phone_number, preauthorization)
                             return True
                     else:
                         raise RegisterError('Passwords do not match')
@@ -388,7 +401,7 @@ class Authenticate:
                     raise RegisterError('Username already taken')
             else:
                 raise RegisterError(
-                    'Please enter an email, phone number, username, name, and password')
+                    'Please enter an email, phone number, username, first name, last name, and password')
 
     def _set_random_password(self, username: str) -> str:
         """
@@ -544,15 +557,21 @@ class Authenticate:
         update_account_details_form.subheader(form_name)
         self.username = username.lower()
         field = update_account_details_form.selectbox(
-            'Field', ['Name', 'Email', 'Phone_Number', 'Wallet_Address']).lower()
+            'Field', ['First_Name', 'Last_Name', 'Email', 'Phone_Number', 'Wallet_Address']).lower()
         new_value = update_account_details_form.text_input('New value')
 
         if update_account_details_form.form_submit_button('Update'):
             if len(new_value) > 0:
                 if new_value != self.credentials['usernames'][self.username][field]:
                     self._update_entry(self.username, field, new_value)
-                    if field == 'name':
-                        st.session_state['name'] = new_value
+                    if field == 'first_name':
+                        st.session_state['first_name'] = new_value
+                        self.exp_date = self._set_exp_date()
+                        self.token = self._token_encode()
+                        self.cookie_manager.set(self.cookie_name, self.token,
+                                                expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
+                    if field == 'last_name':
+                        st.session_state['last_name'] = new_value
                         self.exp_date = self._set_exp_date()
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
