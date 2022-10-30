@@ -4,14 +4,14 @@ cookie:
   name: some_cookie_name
 credentials:
   usernames:
-    user1:
-      email: user1@gmail.com
+    jdoe1:
+      email: jdoe1@gmail.com
       name: John Doe
       phone_number: (619)222-2134
       wallet_address: 0xE6579cC62aE2B34420317f8017F5cbd680f719D6
       password: $2b$12$17DWFn5SLJ5dA4Tv3auVj.rnR9Xl5t4GB2/cGcG0uqRRJK6YcLKfa
-    user2:
-      email: user2@gmail.com
+    jdoe2:
+      email: jdoe2@gmail.com
       name: Jane Doe
       phone_number: (510)245-3333
       wallet_address: 0xE6579cC62aE2B34420317f8017F5cbd680f719D6
