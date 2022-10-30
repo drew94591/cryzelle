@@ -10,7 +10,7 @@ class Home:
 
         # Get Balance of address in Wei
         wei_balance = w3.eth.get_balance(
-            '0x77649188307aE2aEEa5e2A64aC3BDc85e842ab4f')
+            '0xc495026D591784c24F50631eE689645eC2DfE5dD')
 
         # Convert Wei value to ether
         ether_amount = w3.fromWei(wei_balance, "ether")

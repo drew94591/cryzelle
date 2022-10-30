@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml import SafeLoader
-from apps import home_page, accounts, loans, sms_util, transactions
+from apps import user, home_page, account, wallet, loan, sms_util, transaction
 
 st.set_page_config(
     page_title="Login",
@@ -27,19 +27,20 @@ authenticator = stauth.Authenticate(
 
 def set_left_nav():
     authenticator.logout("Logout", "sidebar")
-    account = accounts.Account()
-    #account.search("Search", "sidebar")
-    trx = transactions.Transaction()
+    current_user = user.User()
+    users_account = account.Account()
+    #current_user.search("Search", "sidebar")
+    trx = transaction.Transaction()
 
     choice = st.sidebar.selectbox(
-        "Navigation", ["Home", "Search", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Loan Information", "Refer A Friend!"])
+        "Navigation", ["Home", "Search", "My Account", "Transaction History", "Send Cryptocurrency", "Request Cryptocurrency", "Loan Details", "Refer A Friend!"])
     if choice == "Home":
         home = home_page.Home()
         home.page()
     elif choice == "Search":
-        account.search("Find", "main")
+        current_user.search("Find", "main")
     elif choice == "My Account":
-        account.details()
+        users_account.details()
         # Creating an update account details widget
         try:
             if authenticator.update_account_details(st.session_state['username'], 'Account Details'):
@@ -59,9 +60,9 @@ def set_left_nav():
         trx.send()
     elif choice == "Request Cryptocurrency":
         trx.request()
-    elif choice == "Loan Information":
-        loan = loans.Loan()
-        loan.details()
+    elif choice == "Loan Details":
+        users_loan = loan.Loan()
+        users_loan.details()
     elif choice == "Refer A Friend!":
         sms = sms_util.SMS()
         sms.invite()
