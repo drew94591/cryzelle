@@ -45,20 +45,20 @@ class Authenticate:
 
         if 'name' not in st.session_state:
             st.session_state['name'] = None
-        if 'first_name' not in st.session_state:
-            st.session_state['first_name'] = None
-        if 'last_name' not in st.session_state:
-            st.session_state['last_name'] = None
+        if 'first name' not in st.session_state:
+            st.session_state['first name'] = None
+        if 'last name' not in st.session_state:
+            st.session_state['last name'] = None
         if 'authentication_status' not in st.session_state:
             st.session_state['authentication_status'] = None
         if 'username' not in st.session_state:
             st.session_state['username'] = None
         if 'email' not in st.session_state:
             st.session_state['email'] = None
-        if 'phone_number' not in st.session_state:
-            st.session_state['phone_number'] = None
-        if 'wallet_address' not in st.session_state:
-            st.session_state['wallet_address'] = None
+        if 'phone number' not in st.session_state:
+            st.session_state['phone number'] = None
+        if 'wallet address' not in st.session_state:
+            st.session_state['wallet address'] = None
         if 'logout' not in st.session_state:
             st.session_state['logout'] = None
         if 'search' not in st.session_state:
@@ -151,11 +151,11 @@ class Authenticate:
             try:
                 if self._check_pw():
                     if inplace:
-                        st.session_state['first_name'] = self.credentials['usernames'][self.username]['first_name']
-                        st.session_state['last_name'] = self.credentials['usernames'][self.username]['last_name']
+                        st.session_state['first name'] = self.credentials['usernames'][self.username]['first name']
+                        st.session_state['last name'] = self.credentials['usernames'][self.username]['last name']
                         st.session_state['email'] = self.credentials['usernames'][self.username]['email']
-                        st.session_state['phone_number'] = self.credentials['usernames'][self.username]['phone_number']
-                        st.session_state['wallet_address'] = self.credentials['usernames'][self.username]['wallet_address']
+                        st.session_state['phone number'] = self.credentials['usernames'][self.username]['phone number']
+                        st.session_state['wallet address'] = self.credentials['usernames'][self.username]['wallet address']
                         self.exp_date = self._set_exp_date()
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
@@ -235,8 +235,8 @@ class Authenticate:
                 self.cookie_manager.delete(self.cookie_name)
                 st.session_state['logout'] = True
                 st.session_state['name'] = None
-                st.session_state['first_name'] = None
-                st.session_state['last_name'] = None
+                st.session_state['first name'] = None
+                st.session_state['last name'] = None
                 st.session_state['username'] = None
                 st.session_state['authentication_status'] = None
         elif location == 'sidebar':
@@ -244,8 +244,8 @@ class Authenticate:
                 self.cookie_manager.delete(self.cookie_name)
                 st.session_state['logout'] = True
                 st.session_state['name'] = None
-                st.session_state['first_name'] = None
-                st.session_state['last_name'] = None
+                st.session_state['first name'] = None
+                st.session_state['last name'] = None
                 st.session_state['username'] = None
                 st.session_state['authentication_status'] = None
 
@@ -335,9 +335,9 @@ class Authenticate:
             The preauthorization requirement, True: user must be preauthorized to register, 
             False: any user can register.
         """
-        self.credentials['usernames'][username] = {'first_name': first_name,
-                                                   'last_name': last_name,
-                                                   'password': Hasher([password]).generate()[0], 'email': email, 'phone_number': phone_number}
+        self.credentials['usernames'][username] = {'first name': first_name,
+                                                   'last name': last_name,
+                                                   'password': Hasher([password]).generate()[0], 'email': email, 'phone number': phone_number}
         if preauthorization:
             self.preauthorized['emails'].remove(email)
 
@@ -557,21 +557,21 @@ class Authenticate:
         update_account_details_form.subheader(form_name)
         self.username = username.lower()
         field = update_account_details_form.selectbox(
-            'Field', ['First_Name', 'Last_Name', 'Email', 'Phone_Number', 'Wallet_Address']).lower()
+            'Field', ['First Name', 'Last Name', 'Email', 'Phone Number', 'Wallet Address']).lower()
         new_value = update_account_details_form.text_input('New value')
 
         if update_account_details_form.form_submit_button('Update'):
             if len(new_value) > 0:
                 if new_value != self.credentials['usernames'][self.username][field]:
                     self._update_entry(self.username, field, new_value)
-                    if field == 'first_name':
-                        st.session_state['first_name'] = new_value
+                    if field == 'first name':
+                        st.session_state['first name'] = new_value
                         self.exp_date = self._set_exp_date()
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
                                                 expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
-                    if field == 'last_name':
-                        st.session_state['last_name'] = new_value
+                    if field == 'last name':
+                        st.session_state['last name'] = new_value
                         self.exp_date = self._set_exp_date()
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
@@ -582,14 +582,14 @@ class Authenticate:
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
                                                 expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
-                    if field == 'phone_number':
-                        st.session_state['phone_number'] = new_value
+                    if field == 'phone number':
+                        st.session_state['phone number'] = new_value
                         self.exp_date = self._set_exp_date()
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
                                                 expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
-                    if field == "wallet_address":
-                        st.session_state['wallet_address'] = new_value
+                    if field == "wallet address":
+                        st.session_state['wallet address'] = new_value
                         self.exp_date = self._set_exp_date()
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
