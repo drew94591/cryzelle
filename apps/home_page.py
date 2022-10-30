@@ -10,7 +10,7 @@ class Home:
         st.write(f'Email: {st.session_state["email"]}')
         st.write(f'Phone Number: {st.session_state["phone_number"]}')
         wallet_address = ''
-        wallet_addresses = w3.eth.get_accounts()
+        wallet_addresses = w3.eth.accounts
 
         for i in wallet_addresses:
             st.session_state["wallet_address"] = i
