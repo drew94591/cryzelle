@@ -370,10 +370,10 @@ class Authenticate:
 
         register_user_form.subheader(form_name)
         new_email = register_user_form.text_input('Email')
-        new_phone_number = register_user_form.text_input('Phone_Number')
+        new_phone_number = register_user_form.text_input('Phone Number')
         new_username = register_user_form.text_input('Username').lower()
-        new_first_name = register_user_form.text_input('First_Name')
-        new_last_name = register_user_form.text_input('Last_Name')
+        new_first_name = register_user_form.text_input('First Name')
+        new_last_name = register_user_form.text_input('Last Name')
         new_password = register_user_form.text_input(
             'Password', type='password')
         new_password_repeat = register_user_form.text_input(

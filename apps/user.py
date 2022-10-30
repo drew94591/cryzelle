@@ -4,7 +4,8 @@ from .account import Account
 
 class User:
     user_id = ''
-    name = ''
+    first_name = ''
+    last_name = ''
     password = ''
     phone_number = ''
     email_address = ''
@@ -16,11 +17,17 @@ class User:
     def set_user_id(self, user_id):
         self.user_id = user_id
 
-    def get_name(self):
-        return self.name
+    def get_first_name(self):
+        return self.first_name
 
-    def set_name(self, name):
-        self.name = name
+    def set_first_name(self, first_name):
+        self.first_name = first_name
+
+    def get_last_name(self):
+        return self.last_name
+
+    def set_last_name(self, last_name):
+        self.last_name = last_name
 
     def get_password(self):
         return self.password
