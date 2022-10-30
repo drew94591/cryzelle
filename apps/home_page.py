@@ -6,7 +6,7 @@ w3 = Web3(Web3.HTTPProvider('HTTP://52.87.239.109:8545'))
 class Home:
     def page(self):
         st.title(f'Welcome *{st.session_state["name"]}*')
-        # st.write(w3.eth.get_block(0))
+        st.write(w3.eth.get_block(0))
 
         # Get Balance of address in Wei
         #wei_balance = w3.eth.get_balance('0xc495026D591784c24F50631eE689645eC2DfE5dD')
