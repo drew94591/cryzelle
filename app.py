@@ -65,7 +65,7 @@ def set_left_nav():
         current_user.search("Find", "main")
     elif choice == "Invite A Friend!":
         sms = sms_util.SMS()
-        sms.invite()
+        sms.invite("Invite", "main")
 
 
 def main():
