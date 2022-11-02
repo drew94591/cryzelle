@@ -27,9 +27,9 @@ class SMS:
                             from_=twilio_phone_number,
                             to=to_phone_number
                         )
-                    st.write("Message was sent successfully!")
+                    st.write("Message sent successfully!")
                 except:
-                    st.write("Invalid phone number!")
+                    raise ValueError("You've entered an invalid phone number!")
             elif location == 'sidebar':
                 input_phone_number = st.sidebar.text_input(
                     "Enter Phone Number")
@@ -47,6 +47,7 @@ class SMS:
                                 from_=twilio_phone_number,
                                 to=to_phone_number
                             )
-                        st.write("Message was sent successfully!")
+                        st.write("Message sent successfully!")
                     except:
-                        st.writ("Invalid phone number!")
+                        raise ValueError(
+                            "You've entered an invalid phone number!")
