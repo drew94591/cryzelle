@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy import inspect
 import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
@@ -8,6 +12,18 @@ st.set_page_config(
     page_title="Login",
     page_icon=""
 )
+
+# Load .env envrionment variables
+load_dotenv()
+
+# Read in database settings
+database_connection_string = os.getenv("DATABASE_URL")
+
+# Read in database schema
+database_schema = os.getenv("DATABASE_SCHEMA")
+
+# Create database connection
+engine = create_engine(database_connection_string)
 
 
 # Loading config file

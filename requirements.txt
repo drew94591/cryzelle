@@ -6,3 +6,5 @@ pyjwt
 bcrypt
 web3
 twilio
+python-dotenv
+psycopg2
