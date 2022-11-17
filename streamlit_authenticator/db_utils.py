@@ -372,10 +372,9 @@ def update_wallet(wallet_id, wallet_nickname, active_indicator, default_indicato
         ----------
         wallet_id: bigint
             key of the wallet account object
-        first_name: str
-        last_name: str
-        mobile_number: str
-        email_address: str
+        wallet_nickname: str
+        active indicator: bool
+        default_indicator: bool
             
         Returns
         -------
@@ -393,3 +392,56 @@ def update_wallet(wallet_id, wallet_nickname, active_indicator, default_indicato
         connection.close()
     return result
 
+
+def create_contract(collateral, contract_link):
+    """
+        creates contract
+
+        Parameters
+        ----------
+        collateral: str
+        contract_link: str
+            
+        Returns
+        -------
+        Success or Fail
+    """
+    result = []
+    engine = get_db_engine()
+    connection = engine.connect()
+    try:
+        stmt = text("INSERT INTO contracts (id, collateral, contract_link) VALUES (nextval('contract_id_seq'), :col, :link)")
+
+        result = connection.execute(stmt, col = collateral, link = contract_link)
+        
+    finally:
+        connection.close()
+    return result
+
+
+
+def create_party(contract_id, legal_party_type, legal_party_id):
+    """
+        creates contract legal party
+
+        Parameters
+        ----------
+        contract_id: bigint
+        legal_party_type: str
+        legal_party_id: bigint
+            
+        Returns
+        -------
+        Success or Fail
+    """
+    result = []
+    engine = get_db_engine()
+    connection = engine.connect()
+    try:
+        stmt = text("INSERT INTO contract_parties (id, contract_id, legal_party_type, legal_party_id) VALUES (nextval('contract_party_id_seq'), :cid, :party_type, :party_id)")
+
+        result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id)
+        
+    finally:
+        connection.close()
+    return result
