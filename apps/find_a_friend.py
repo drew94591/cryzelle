@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_authenticator.db_utils import get_user_profile_by_phone, get_user_profile_by_email
 
+
 class Friend:
     def search(self):
         st.markdown("# Find a Friend")
@@ -24,16 +25,16 @@ class Friend:
 
                 for i in friend:
                     if i.isnumeric():
-                        phone = phone + friend[i]
+                        phone = phone + i
 
-                if len(phone) > 9:
+                if len(phone) > 10:
                     if phone[0] == "1":
                         phone = phone[1:]
                     else:
                         st.write(
                             "The phone number is too long, please try again.")
 
-                if len(phone) == 9:
+                if len(phone) == 10:
                     friend_information = get_user_profile_by_phone(phone)
 
             elif at_sym in friend:
@@ -55,6 +56,6 @@ class Friend:
                 st.write("Mobile Number: ", friend_information[2])
                 st.write("Email: ", friend_information[3])
                 st.text(" \n")
-                
+
             else:
                 st.write(f"We could not find {friend} in our database.")
