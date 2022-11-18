@@ -290,7 +290,7 @@ def create_user(username, password):
         result = connection.execute(stmt, userid = username, pwd = password)
         stmt = text("SELECT id from users where username = :userid and password = pwd")
         result = connection.execute(stmt, userid = username, pwd = password).one_or_none()
-        if result is not None
+        if result is not None:
             output = result.id
     finally:
         connection.close()
@@ -318,7 +318,7 @@ def update_password(username, new_password):
         result = connection.execute(stmt, pwd = new_password, userid = username)
         stmt = text("SELECT id from users where username = :userid")
         result = connection.execute(stmt, userid = username).one_or_none()
-        if result is not None
+        if result is not None:
             output = result.id
         
     finally:
@@ -353,7 +353,7 @@ def create_user_profile(user_id, first_name, last_name, mobile_number, email_add
 
         stmt = text("SELECT id from user_profiles where user_id = :userid")
         result = connection.execute(stmt, userid = username, pwd = password).one_or_none()
-        if result is not None
+        if result is not None:
             output = result.id
         
     finally:
@@ -387,7 +387,7 @@ def update_user_profile(id, first_name, last_name, mobile_number, email_address)
 
         stmt = text("SELECT id from user_profiles where first_name = :fn and last_name = :ln and mobile_number = :cp and email_address = :email and id = :upid")
         result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id)
-        if result is not None
+        if result is not None:
             output = result.id
         
     finally:
@@ -421,7 +421,7 @@ def create_wallet(user_id, wallet_nickname, wallet_link, active_indicator=True, 
 
         stmt = text("SELECT id from wallet_accounts wallet_nickname = :nickname and wallet_link = :link and user_id = :uid and active_indicator = :is_active and default_indicator = :is_default)")
         result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator)
-        if result is not None
+        if result is not None:
             output = result.id
     finally:
         connection.close()
@@ -452,7 +452,7 @@ def update_wallet(wallet_id, wallet_nickname, active_indicator, default_indicato
         result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id)
         stmt = text("SELECT id FROM wallet_accounts where wallet_nickname = :nickname and active_indicator = :is_active and default_indicator = :is_default and id = :wid")
         result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id)
-        if result is not None
+        if result is not None:
             output = result.id        
     finally:
         connection.close()
@@ -480,7 +480,7 @@ def create_contract(collateral, contract_link):
         result = connection.execute(stmt, col = collateral, link = contract_link)
         stmt = text("SELECT id from contracts where collateral = :col AND contract_link = :link")
         result = connection.execute(stmt, col = collateral, link = contract_link)
-        if result is not None
+        if result is not None:
             output = result.id   
     finally:
         connection.close()
@@ -510,7 +510,7 @@ def create_party(contract_id, legal_party_type, legal_party_id):
         result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id)
         stmt = text("SELECT id FROM contract_parties WHERE contract_id = :cid AND legal_party_type = :party_type AND legal_party_id = :party_id")
         result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id)
-        if result is not None
+        if result is not None:
             output = result.id
     finally:
         connection.close()
