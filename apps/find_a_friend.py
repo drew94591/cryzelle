@@ -12,6 +12,7 @@ class Friend:
         at_sym = "@"
         phone = ""
         friend_information = []
+        friend_information = None
 
         if st.button("Find"):
             # Check to see if email or phone number
@@ -23,7 +24,7 @@ class Friend:
 
                 for i in friend:
                     if i.isnumeric():
-                        phone += friend[i]
+                        phone = phone + friend[i]
 
                 if len(phone) > 9:
                     if phone[0] == "1":
