@@ -5,6 +5,7 @@ from sqlalchemy.sql import text
 import streamlit as st
 
 
+# TODO: Change to use model and Session
 def get_db_engine():
     """
         Initializes DB engine
@@ -91,20 +92,19 @@ def get_user_profile_by_username(username):
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("SELECT up.first_name, up.last_name, mobile_number, email_address FROM users INNER JOIN user_profiles up ON users.id = up.user_id WHERE username = :userid")
+        stmt = text("SELECT up.first_name, up.last_name, mobile_number, email_address FROM users INNER JOIN user_profiles up ON users.id = up.user_id WHERE users.username = :userid")
         result = connection.execute(stmt, userid = username).one_or_none()
     finally:
         connection.close()
     return result
 
-
-def get_user_profile_by_user_id(user_id):
+def get_user_profile_by_phone(phone):
     """
-        Retrieves the user profile data.
+        Retrieves the user profile data by phone.
 
         Parameters
         ----------
-            user_id: userid
+            phone: str
         Returns
         -------
         None or a User Profile Record
@@ -115,8 +115,32 @@ def get_user_profile_by_user_id(user_id):
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("SELECT first_name, last_name, mobile_number, email_address FROM user_profiles WHERE user_id= :id")
-        result = connection.execute(stmt, id = user_id).one_or_none()
+        stmt = text("SELECT first_name, last_name, mobile_number, email_address FROM user_profiles WHERE mobile_number = :cp")
+        result = connection.execute(stmt, cp = phone).one_or_none()
+    finally:
+        connection.close()
+    return result
+
+
+def get_user_profile_by_email(email):
+    """
+        Retrieves the user profile data by email address.
+
+        Parameters
+        ----------
+            phone: str
+        Returns
+        -------
+        None or a User Profile Record
+            user profile detail: (first name, last name, mobile number, email)
+    """
+
+    result = None
+    engine = get_db_engine()
+    connection = engine.connect()
+    try:
+        stmt = text("SELECT first_name, last_name, mobile_number, email_address FROM user_profiles WHERE email_address = :email_address")
+        result = connection.execute(stmt, email_address = email).one_or_none()
     finally:
         connection.close()
     return result
@@ -145,14 +169,14 @@ def get_default_active_user_wallet(username):
         connection.close()
     return result
 
-
-def get_default_active_user_wallet_by_user_id(user_id):
+def get_default_active_user_wallet_by_phone(phone):
     """
-        Retrieves the user's active, default wallet.
+        Retrieves the user's active, default wallet given phone.
 
         Parameters
         ----------
-            user_id: user id
+            phone: str
+            
         Returns
         -------
         None or A Wallet Account Record
@@ -162,9 +186,34 @@ def get_default_active_user_wallet_by_user_id(user_id):
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM wallet_accounts WHERE user_id = :id and is_default is true and is_active is true")
+        stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM user INNER JOIN wallet_accounts wallet ON users.id = wallet.user_id INNER JOIN user_profiles up ON users.id = up.user_id WHERE mobile_number = :cp and is_default is true and is_active is true")
 
-        result = connection.execute(stmt, id = user_id).one_or_none()
+        result = connection.execute(stmt, cp = phone).one_or_none()
+    finally:
+        connection.close()
+    return result
+
+
+def get_default_active_user_wallet_by_email(email):
+    """
+        Retrieves the user's active, default wallet given email address.
+
+        Parameters
+        ----------
+            phone: str
+            
+        Returns
+        -------
+        None or A Wallet Account Record
+            detail: (wallet id, wallet nickname, wallet link)
+    """
+    result = None
+    engine = get_db_engine()
+    connection = engine.connect()
+    try:
+        stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM user INNER JOIN wallet_accounts wallet ON users.id = wallet.user_id INNER JOIN user_profiles up ON users.id = up.user_id WHERE email_address = :email_address and is_default is true and is_active is true")
+
+        result = connection.execute(stmt, email_address = email).one_or_none()
     finally:
         connection.close()
     return result
@@ -226,50 +275,55 @@ def create_user(username, password):
 
         Parameters
         ----------
-        user_credential_dict: dict
-            dictionary for user credential to create user and user profile
+        username: str
+        password: str
             
         Returns
         -------
-        Success or Fail
+        None or the record id
     """
-    result = []
+    output = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
         stmt = text("INSERT INTO users (id, username, password) VALUES (nextval('user_id_seq'), :userid, :pwd)")
-
         result = connection.execute(stmt, userid = username, pwd = password)
-        
+        stmt = text("SELECT id from users where username = :userid and password = pwd")
+        result = connection.execute(stmt, userid = username, pwd = password).one_or_none()
+        if result is not None
+            output = result.id
     finally:
         connection.close()
-    return result
+    return output
 
 
-def update_password(user_id, new_password):
+def update_password(username, new_password):
     """
         updates the user's login password
 
         Parameters
         ----------
+        username: str
         new_password: str
-            new password
             
         Returns
         -------
-        Success or Fail
+        None or record id
     """
-    result = []
+    output = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("UPDATE users SET password = :pwd WHERE id = :id)")
-
-        result = connection.execute(stmt, pwd = new_password, id = user_id)
+        stmt = text("UPDATE users SET password = :pwd WHERE username = :userid)")
+        result = connection.execute(stmt, pwd = new_password, userid = username)
+        stmt = text("SELECT id from users where username = :userid")
+        result = connection.execute(stmt, userid = username).one_or_none()
+        if result is not None
+            output = result.id
         
     finally:
         connection.close()
-    return result
+    return output
 
 
 
@@ -288,19 +342,23 @@ def create_user_profile(user_id, first_name, last_name, mobile_number, email_add
             
         Returns
         -------
-        Success or Fail
+        None or Record id
     """
-    result = []
+    outout = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
         stmt = text("INSERT INTO user_profiles (id, first_name, last_name, user_id, mobile_number, email_address) VALUES (nextval('user_profile_id_seq'), :fn, :ln, :uid, :cp, :email)")
-
         result = connection.execute(stmt, fn = first_name, ln = last_name, uid = user_id, cp = mobile_number, email = email_address)
+
+        stmt = text("SELECT id from user_profiles where user_id = :userid")
+        result = connection.execute(stmt, userid = username, pwd = password).one_or_none()
+        if result is not None
+            output = result.id
         
     finally:
         connection.close()
-    return result
+    return output
 
 
 def update_user_profile(id, first_name, last_name, mobile_number, email_address):
@@ -318,20 +376,23 @@ def update_user_profile(id, first_name, last_name, mobile_number, email_address)
             
         Returns
         -------
-        Success or Fail
+        None or Record id
     """
-    result = []
+    output = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
         stmt = text("UPDATE user_profiles SET first_name = :fn, last_name = :ln, mobile_number = :cp, email_address = :email WHERE id = :upid")
-
         result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id)
+
+        stmt = text("SELECT id from user_profiles where first_name = :fn and last_name = :ln and mobile_number = :cp and email_address = :email and id = :upid")
+        result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id)
+        if result is not None
+            output = result.id
         
     finally:
         connection.close()
-    return result
-
+    return output
 
 
 def create_wallet(user_id, wallet_nickname, wallet_link, active_indicator=True, default_indicator=False):
@@ -351,17 +412,20 @@ def create_wallet(user_id, wallet_nickname, wallet_link, active_indicator=True, 
         -------
         Success or Fail
     """
-    result = []
+    output = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("INSERT INTO wallet_accounts (id, wallet_nickname, wallet_link, active_indicator, default_indicator) VALUES (nextval('wallet_account_id_seq'), :nickname, :link, :uid, :is_active, :is_default)")
-
+        stmt = text("INSERT INTO wallet_accounts (id, wallet_nickname, wallet_link, user_id, active_indicator, default_indicator) VALUES (nextval('wallet_account_id_seq'), :nickname, :link, :uid, :is_active, :is_default)")
         result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator)
-        
+
+        stmt = text("SELECT id from wallet_accounts wallet_nickname = :nickname and wallet_link = :link and user_id = :uid and active_indicator = :is_active and default_indicator = :is_default)")
+        result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator)
+        if result is not None
+            output = result.id
     finally:
         connection.close()
-    return result
+    return output
 
 
 def update_wallet(wallet_id, wallet_nickname, active_indicator, default_indicator):
@@ -380,17 +444,19 @@ def update_wallet(wallet_id, wallet_nickname, active_indicator, default_indicato
         -------
         Success or Fail
     """
-    result = []
+    output = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
         stmt = text("UPDATE wallet_accounts SET wallet_nickname = :nickname, active_indicator = :is_active, default_indicator = :is_default WHERE id = :wid")
-
         result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id)
-        
+        stmt = text("SELECT id FROM wallet_accounts where wallet_nickname = :nickname and active_indicator = :is_active and default_indicator = :is_default and id = :wid")
+        result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id)
+        if result is not None
+            output = result.id        
     finally:
         connection.close()
-    return result
+    return output
 
 
 def create_contract(collateral, contract_link):
@@ -406,14 +472,16 @@ def create_contract(collateral, contract_link):
         -------
         Success or Fail
     """
-    result = []
+    output = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
         stmt = text("INSERT INTO contracts (id, collateral, contract_link) VALUES (nextval('contract_id_seq'), :col, :link)")
-
         result = connection.execute(stmt, col = collateral, link = contract_link)
-        
+        stmt = text("SELECT id from contracts where collateral = :col AND contract_link = :link")
+        result = connection.execute(stmt, col = collateral, link = contract_link)
+        if result is not None
+            output = result.id   
     finally:
         connection.close()
     return result
@@ -434,14 +502,16 @@ def create_party(contract_id, legal_party_type, legal_party_id):
         -------
         Success or Fail
     """
-    result = []
+    output = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
         stmt = text("INSERT INTO contract_parties (id, contract_id, legal_party_type, legal_party_id) VALUES (nextval('contract_party_id_seq'), :cid, :party_type, :party_id)")
-
         result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id)
-        
+        stmt = text("SELECT id FROM contract_parties WHERE contract_id = :cid AND legal_party_type = :party_type AND legal_party_id = :party_id")
+        result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id)
+        if result is not None
+            output = result.id
     finally:
         connection.close()
-    return result
+    return output
