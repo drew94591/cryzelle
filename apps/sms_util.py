@@ -18,7 +18,7 @@ class SMS:
             if st.button(control_name):
                 try:
                     body_msg = (f"Hello {first_name}, {st.session_state['first name']} {st.session_state['last name']} thought you might be interested in joining our network of friends!"
-                                f" Just click this link https://drew94591-cryzelle-register-ytjnoc.streamlitapp.com/ to register @cryptoXchange and receive 100 free Ethereum tokens instantly just for signing up!")
+                                f" Just click this link https://jollibeechicken.streamlit.app/ to register @cryptoXchange and receive 100 free Ethereum tokens instantly just for signing up!")
                     to_phone_number = f"+1{input_phone_number}"
                     message = client.messages \
                         .create(
@@ -40,7 +40,7 @@ class SMS:
                 if st.sidebar.checkbox(control_name):
                     try:
                         body_msg = (f"Hello {first_name}, {st.session_state['first name']} {st.session_state['last name']} thought you might be interested in joining our network of friends!"
-                                    f" Just click this link https://drew94591-cryzelle-register-ytjnoc.streamlitapp.com/ to register @cryptoXchange and receive 100 free Ethereum tokens instantly just for signing up!")
+                                    f" Just click this link https://jollibeechicken.streamlit.app/ to register @cryptoXchange and receive 100 free Ethereum tokens instantly just for signing up!")
                         to_phone_number = f"+1{input_phone_number}"
                         message = client.messages \
                             .create(
