@@ -6,7 +6,7 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml import SafeLoader
-from apps import user, home_page, account, wallet, loan, sms_util, transaction
+from apps import user, home_page, account, wallet, loan, sms_util, transaction, find_a_friend
 
 st.set_page_config(
     page_title="Login",
@@ -78,7 +78,8 @@ def set_left_nav():
         users_loan = loan.Loan()
         users_loan.details()
     elif choice == "Find A Friend":
-        current_user.search("Find", "main")
+        friends = find_a_friend.Friend()
+        friends.search()
     elif choice == "Invite A Friend!":
         sms = sms_util.SMS()
         sms.invite("Invite", "main")
