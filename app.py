@@ -16,16 +16,6 @@ st.set_page_config(
 # Load .env envrionment variables
 load_dotenv()
 
-# Read in database settings
-database_connection_string = os.getenv("DATABASE_URL")
-
-# Read in database schema
-database_schema = os.getenv("DATABASE_SCHEMA")
-
-# Create database connection
-engine = create_engine(database_connection_string)
-
-
 # Loading config file
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)

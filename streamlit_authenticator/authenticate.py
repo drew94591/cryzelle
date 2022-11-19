@@ -3,6 +3,7 @@ import bcrypt
 import streamlit as st
 from datetime import datetime, timedelta
 import extra_streamlit_components as stx
+import streamlit_authenticator.db_utils as db
 
 from .hasher import Hasher
 from .utils import generate_random_pw
@@ -102,17 +103,21 @@ class Authenticate:
         """
         return (datetime.utcnow() + timedelta(days=self.cookie_expiry_days)).timestamp()
 
-    def _check_pw(self) -> bool:
+    def _check_pw(self, saved_password) -> bool:
         """
         Checks the validity of the entered password.
 
+        Parameters
+        ----------
+        saved_password: str
+        
         Returns
         -------
         bool
-            The validity of the entered password by comparing it to the hashed password on disk.
+            The validity of the entered password by comparing it to the hashed password on db.
         """
         return bcrypt.checkpw(self.password.encode(),
-                              self.credentials['usernames'][self.username]['password'].encode())
+                              saved_password.encode())
 
     def _check_cookie(self):
         """
@@ -143,19 +148,24 @@ class Authenticate:
         bool
             Validity of entered credentials.
         """
-        #
-        # @TODO: Replace below code with database connection and checking againgst username and password
-        # i.e. if verify(self.username, self.password)
-        #
-        if self.username in self.credentials['usernames']:
+        
+        user_credential = db.get_user_credentials(self.username)
+        
+        if user_credential is not None and user_credential.username == self.username:
+            
             try:
-                if self._check_pw():
+                if self._check_pw(user_credential.password):
                     if inplace:
-                        st.session_state['first name'] = self.credentials['usernames'][self.username]['first name']
-                        st.session_state['last name'] = self.credentials['usernames'][self.username]['last name']
-                        st.session_state['email'] = self.credentials['usernames'][self.username]['email']
-                        st.session_state['phone number'] = self.credentials['usernames'][self.username]['phone number']
-                        st.session_state['wallet address'] = self.credentials['usernames'][self.username]['wallet address']
+                        user_profile = db.get_user_profile_by_id(user_credential.id)
+                        wallet = db.get_default_active_user_wallet_by_user_id(user_credential.id)
+                        st.session_state['user_id'] = user_credential.id
+                        st.session_state['profile_id'] = user_profile.id
+                        st.session_state['first name'] = user_profile.first_name
+                        st.session_state['last name'] = user_profile.last_name
+                        st.session_state['email'] = user_profile.email_address
+                        st.session_state['phone number'] = user_profile.phone_number
+                        st.session_state['wallet_id'] = wallet.id
+                        st.session_state['wallet address'] = wallet.wallet_link
                         self.exp_date = self._set_exp_date()
                         self.token = self._token_encode()
                         self.cookie_manager.set(self.cookie_name, self.token,
@@ -234,10 +244,15 @@ class Authenticate:
             if st.button(button_name):
                 self.cookie_manager.delete(self.cookie_name)
                 st.session_state['logout'] = True
+
                 st.session_state['name'] = None
                 st.session_state['first name'] = None
                 st.session_state['last name'] = None
                 st.session_state['username'] = None
+                st.session_state['user_id'] = None
+                st.session_state['wallet_id'] = None
+                st.session_state['profile_id'] = None
+                st.session_state['wallet address'] = None
                 st.session_state['authentication_status'] = None
         elif location == 'sidebar':
             if st.sidebar.button(button_name):
@@ -247,11 +262,15 @@ class Authenticate:
                 st.session_state['first name'] = None
                 st.session_state['last name'] = None
                 st.session_state['username'] = None
+                st.session_state['user_id'] = None
+                st.session_state['wallet_id'] = None
+                st.session_state['profile_id'] = None
+                st.session_state['wallet address'] = None
                 st.session_state['authentication_status'] = None
 
     def _update_password(self, username: str, password: str):
         """
-        Updates credentials dictionary with user's reset hashed password.
+        Updates credentials data in DB with user's reset hashed password.
 
         Parameters
         ----------
@@ -260,8 +279,10 @@ class Authenticate:
         password: str
             The updated plain text password.
         """
-        self.credentials['usernames'][username]['password'] = Hasher(
-            [password]).generate()[0]
+        hashed_password = Hasher([password]).generate()[0]
+        output = db.update_password(username, hashed_password)
+        if output is None:
+            raise ResetError("Unable to update password")
 
     def reset_password(self, username: str, form_name: str, location: str = 'main') -> bool:
         """
@@ -335,9 +356,12 @@ class Authenticate:
             The preauthorization requirement, True: user must be preauthorized to register, 
             False: any user can register.
         """
-        self.credentials['usernames'][username] = {'first name': first_name,
-                                                   'last name': last_name,
-                                                   'password': Hasher([password]).generate()[0], 'email': email, 'phone number': phone_number}
+        
+        hashed_password = Hasher([password]).generate()[0]
+        user = db.create_user(username, hashed_password)
+        
+        profile = db.create_user_profile(user.id, first_name, last_name, phone_number, email)
+        
         if preauthorization:
             self.preauthorized['emails'].remove(email)
 
@@ -381,7 +405,7 @@ class Authenticate:
 
         if register_user_form.form_submit_button('Register'):
             if len(new_email) and len(new_phone_number) and len(new_username) and len(new_first_name) and len(new_last_name) and len(new_password) > 0:
-                if new_username not in self.credentials['usernames']:
+                if db.get_user_credentials(new_username) is None:
                     if new_password == new_password_repeat:
                         if preauthorization:
                             if new_email in self.preauthorized['emails']:
@@ -403,23 +427,23 @@ class Authenticate:
                 raise RegisterError(
                     'Please enter an email, phone number, username, first name, last name, and password')
 
-    def _set_random_password(self, username: str) -> str:
-        """
-        Updates credentials dictionary with user's hashed random password.
+#     def _set_random_password(self, username: str) -> str:
+#         """
+#         Updates credentials dictionary with user's hashed random password.
 
-        Parameters
-        ----------
-        username: str
-            Username of user to set random password for.
-        Returns
-        -------
-        str
-            New plain text password that should be transferred to user securely.
-        """
-        self.random_password = generate_random_pw()
-        self.credentials['usernames'][username]['password'] = Hasher(
-            [self.random_password]).generate()[0]
-        return self.random_password
+#         Parameters
+#         ----------
+#         username: str
+#             Username of user to set random password for.
+#         Returns
+#         -------
+#         str
+#             New plain text password that should be transferred to user securely.
+#         """
+#         self.random_password = generate_random_pw()
+#         self.credentials['usernames'][username]['password'] = Hasher(
+#             [self.random_password]).generate()[0]
+#         return self.random_password
 
     def forgot_password(self, form_name: str, location: str = 'main') -> tuple:
         """
@@ -452,7 +476,7 @@ class Authenticate:
 
         if forgot_password_form.form_submit_button('Submit'):
             if len(username) > 0:
-                if username in self.credentials['usernames']:
+                if db.get_user_credentials(username) is not None:
                     return username, self.credentials['usernames'][username]['email'], self._set_random_password(username)
                 else:
                     return False, None, None
@@ -460,25 +484,26 @@ class Authenticate:
                 raise ForgotError('Username not provided')
         return None, None, None
 
-    def _get_username(self, key: str, value: str) -> str:
-        """
-        Retrieves username based on a provided entry.
+    # def _get_username(self, key: str, value: str) -> str:
+    #     """
+    #     Retrieves username based on a provided entry.
 
-        Parameters
-        ----------
-        key: str
-            Name of the credential to query i.e. "email".
-        value: str
-            Value of the queried credential i.e. "jsmith@gmail.com".
-        Returns
-        -------
-        str
-            Username associated with given key, value pair i.e. "jsmith".
-        """
-        for username, entries in self.credentials['usernames'].items():
-            if entries[key] == value:
-                return username
-        return False
+    #     Parameters
+    #     ----------
+    #     key: str
+    #         Name of the credential to query i.e. "email".
+    #     value: str
+    #         Value of the queried credential i.e. "jsmith@gmail.com".
+    #     Returns
+    #     -------
+    #     str
+    #         Username associated with given key, value pair i.e. "jsmith".
+    #     """
+        
+    #     for username, entries in self.credentials['usernames'].items():
+    #         if entries[key] == value:
+    #             return username
+    #     return False
 
     def forgot_username(self, form_name: str, location: str = 'main') -> tuple:
         """
