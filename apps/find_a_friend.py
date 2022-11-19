@@ -24,7 +24,7 @@ class Friend:
 
                 for i in friend:
                     if i.isnumeric():
-                        phone += i
+                        phone = phone + i
 
                 if len(phone) > 10:
                     if phone[0] == "1":
