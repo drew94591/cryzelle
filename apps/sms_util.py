@@ -56,7 +56,7 @@ class SMS:
                         with placeholder.container():
                             st.info("Message sent successfully!")
 
-                            
+
 
     def request(self, control_name: str, location: str = 'main'):
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
@@ -68,7 +68,15 @@ class SMS:
         friend_information = []
 
         if location == 'main':
-            input_phone_number = st.text_input("Enter your Friend's Phone Number")
+
+            st.markdown("# Request Crypto from a Friend")
+            st.text(" \n")
+            st.text(" \n")
+            st.write("Please enter the phone number for a friend that is in our network.")
+            st.write("Followed by the amount you would like to request in Eth.")
+            st.text(" \n")
+            input_phone_number = st.text_input("Friend's Phone Number")
+            amount = st.text_input("Amount you wish to request.")
             
             if st.button(control_name):
 
