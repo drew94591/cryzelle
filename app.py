@@ -73,7 +73,8 @@ def set_left_nav():
     elif choice == "Send Cryptocurrency":
         trx.send()
     elif choice == "Request Cryptocurrency":
-        trx.request()
+        trx = sms_util.SMS()
+        trx.request("Request", "main")
     elif choice == "Loan Details":
         users_loan = loan.Loan()
         users_loan.details()
