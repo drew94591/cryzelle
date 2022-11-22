@@ -18,4 +18,3 @@ class Transaction:
 	
     def history(self):
         st.write(w3.eth.getTransaction(st.session_state['wallet address']))
-        
