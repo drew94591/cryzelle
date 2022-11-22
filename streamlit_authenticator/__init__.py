@@ -17,7 +17,6 @@ if not _RELEASE:
 
     # Creating the authenticator object
     authenticator = Authenticate(
-        config['credentials'],
         config['cookie']['name'],
         config['cookie']['key'],
         config['cookie']['expiry_days'],
