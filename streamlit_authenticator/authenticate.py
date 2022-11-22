@@ -161,7 +161,7 @@ class Authenticate:
                         st.session_state['first name'] = user_profile.first_name
                         st.session_state['last name'] = user_profile.last_name
                         st.session_state['email'] = user_profile.email_address
-                        st.session_state['phone number'] = user_profile.phone_number
+                        st.session_state['phone number'] = user_profile.mobile_number
                         st.session_state['wallet_id'] = wallet.id
                         st.session_state['wallet address'] = wallet.wallet_link
                         self.exp_date = self._set_exp_date()

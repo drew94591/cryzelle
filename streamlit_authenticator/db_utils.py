@@ -134,14 +134,14 @@ def get_user_profile_by_id(userid):
         Returns
         -------
         None or a User Profile Record
-            user profile detail: (first name, last name, mobile number, email)
+            user profile detail: (id, first name, last name, mobile number, email)
     """
 
     result = None
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("SELECT up.first_name, up.last_name, mobile_number, email_address FROM users INNER JOIN user_profiles up ON users.id = up.user_id WHERE users.id = :id")
+        stmt = text("SELECT up.id, up.first_name, up.last_name, mobile_number, email_address FROM users INNER JOIN user_profiles up ON users.id = up.user_id WHERE users.id = :id")
         result = connection.execute(stmt, id = userid).one_or_none()
     finally:
         connection.close()
