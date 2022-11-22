@@ -361,8 +361,8 @@ class Authenticate:
         st.session_state['profile_id'] = profile
         st.session_state['first name'] = first_name
         st.session_state['last name'] = last_name
-        st.session_state['email'] = profile.email_address
-        st.session_state['phone number'] = profile.phone_number
+        st.session_state['email'] = email
+        st.session_state['phone number'] = phone_number
         st.session_state['wallet_id'] = wallet
         st.session_state['wallet address'] = wallet_link
 
