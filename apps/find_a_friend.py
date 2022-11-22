@@ -12,6 +12,7 @@ class Friend:
         at_sym = "@"
         phone = ""
         friend_information = []
+        friend_information = None
 
         if st.button("Find"):
             # Check to see if email or phone number
@@ -23,16 +24,16 @@ class Friend:
 
                 for i in friend:
                     if i.isnumeric():
-                        phone += friend[i]
+                        phone = phone + i
 
-                if len(phone) > 9:
+                if len(phone) > 10:
                     if phone[0] == "1":
                         phone = phone[1:]
                     else:
                         st.write(
                             "The phone number is too long, please try again.")
 
-                if len(phone) == 9:
+                if len(phone) == 10:
                     friend_information = get_user_profile_by_phone(phone)
 
             elif at_sym in friend:
@@ -55,5 +56,5 @@ class Friend:
                 st.write("Email: ", friend_information[3])
                 st.text(" \n")
                 
-            else:
+            elif friend_information == None:
                 st.write(f"We could not find {friend} in our database.")
