@@ -354,16 +354,16 @@ class Authenticate:
 
         hashed_password = Hasher([password]).generate()[0]
         user = db.create_user(username, hashed_password)        
-        profile = db.create_user_profile(user.id, first_name, last_name, phone_number, email)
-        wallet = db.create_wallet(user,id, "DEFAULT", wallet_link)
+        profile = db.create_user_profile(user, first_name, last_name, phone_number, email)
+        wallet = db.create_wallet(user, "DEFAULT", wallet_link)
 
-        st.session_state['user_id'] = user.id
-        st.session_state['profile_id'] = profile.id
-        st.session_state['first name'] = profile.first_name
-        st.session_state['last name'] = profile.last_name
-        st.session_state['email'] = profile.email_address
-        st.session_state['phone number'] = profile.phone_number
-        st.session_state['wallet_id'] = wallet.id
+        st.session_state['user_id'] = user
+        st.session_state['profile_id'] = profile
+        st.session_state['first name'] = first_name
+        st.session_state['last name'] = last_name
+        st.session_state['email'] = email
+        st.session_state['phone number'] = phone_number
+        st.session_state['wallet_id'] = wallet
         st.session_state['wallet address'] = wallet_link
 
         if preauthorization:

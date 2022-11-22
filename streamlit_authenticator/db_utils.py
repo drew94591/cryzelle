@@ -358,7 +358,7 @@ def create_user(username, password):
     try:
         stmt = text("INSERT INTO users (id, username, password) VALUES (nextval('user_id_seq'), :userid, :pwd)")
         result = connection.execute(stmt, userid = username, pwd = password)
-        stmt = text("SELECT id FROM users WHERE username = :userid AND password = pwd")
+        stmt = text("SELECT id FROM users WHERE username = :userid AND password = :pwd")
         result = connection.execute(stmt, userid = username, pwd = password).one_or_none()
         if result is not None:
             output = result.id
@@ -465,7 +465,7 @@ def update_user_profile(id, first_name, last_name, mobile_number, email_address)
     return output
 
 
-def create_wallet(user_id, wallet_nickname, wallet_link, active_indicator=True, default_indicator=False):
+def create_wallet(user_id, wallet_nickname, wallet_link, active_indicator=True, default_indicator=True):
     """
         creates wallet account
 
@@ -486,10 +486,10 @@ def create_wallet(user_id, wallet_nickname, wallet_link, active_indicator=True, 
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("INSERT INTO wallet_accounts (id, wallet_nickname, wallet_link, user_id, active_indicator, default_indicator) VALUES (nextval('wallet_account_id_seq'), :nickname, :link, :uid, :is_active, :is_default)")
+        stmt = text("INSERT INTO wallet_accounts (id, wallet_nickname, wallet_link, user_id, is_active, is_default) VALUES (nextval('wallet_account_id_seq'), :nickname, :link, :uid, :is_active, :is_default)")
         result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator)
 
-        stmt = text("SELECT id FROM wallet_accounts WHERE wallet_nickname = :nickname AND wallet_link = :link AND user_id = :uid AND active_indicator = :is_active AND default_indicator = :is_default)")
+        stmt = text("SELECT id FROM wallet_accounts WHERE wallet_nickname = :nickname AND wallet_link = :link AND user_id = :uid AND is_active = :is_active AND is_default = :is_default")
         result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator).one_or_none()
         if result is not None:
             output = result.id
@@ -518,9 +518,9 @@ def update_wallet(wallet_id, wallet_nickname, active_indicator, default_indicato
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("UPDATE wallet_accounts SET wallet_nickname = :nickname, active_indicator = :is_active, default_indicator = :is_default WHERE id = :wid")
+        stmt = text("UPDATE wallet_accounts SET wallet_nickname = :nickname, is_active = :is_active, is_default = :is_default WHERE id = :wid")
         result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id)
-        stmt = text("SELECT id FROM wallet_accounts WHERE wallet_nickname = :nickname AND active_indicator = :is_active AND default_indicator = :is_default AND id = :wid")
+        stmt = text("SELECT id FROM wallet_accounts WHERE wallet_nickname = :nickname AND is_active = :is_active AND is_default = :is_default AND id = :wid")
         result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id).one_or_none()
         if result is not None:
             output = result.id        
