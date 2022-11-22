@@ -2,22 +2,6 @@ cookie:
   expiry_days: 30
   key: some_signature_key
   name: some_cookie_name
-credentials:
-  usernames:
-    jdoe1:
-      email: jdoe1@gmail.com
-      first name: John
-      last name: Doe
-      phone number: (619)222-2134
-      wallet address: 0xE6579cC62aE2B34420317f8017F5cbd680f719D6
-      password: $2b$12$17DWFn5SLJ5dA4Tv3auVj.rnR9Xl5t4GB2/cGcG0uqRRJK6YcLKfa
-    jdoe2:
-      email: jdoe2@gmail.com
-      first name: Jane
-      last name: Doe
-      phone number: (510)245-3333
-      wallet address: 0xE6579cC62aE2B34420317f8017F5cbd680f719D6
-      password: $2b$12$17DWFn5SLJ5dA4Tv3auVj.rnR9Xl5t4GB2/cGcG0uqRRJK6YcLKfa
 preauthorized:
   emails:
   - webmaster@gmail.com

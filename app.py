@@ -16,16 +16,6 @@ st.set_page_config(
 # Load .env envrionment variables
 load_dotenv()
 
-# Read in database settings
-database_connection_string = os.getenv("DATABASE_URL")
-
-# Read in database schema
-database_schema = os.getenv("DATABASE_SCHEMA")
-
-# Create database connection
-engine = create_engine(database_connection_string)
-
-
 # Loading config file
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -33,7 +23,6 @@ with open('config.yaml') as file:
 
 # Creating the authenticator object
 authenticator = stauth.Authenticate(
-    config['credentials'],
     config['cookie']['name'],
     config['cookie']['key'],
     config['cookie']['expiry_days'],
@@ -73,7 +62,8 @@ def set_left_nav():
     elif choice == "Send Cryptocurrency":
         trx.send()
     elif choice == "Request Cryptocurrency":
-        trx.request()
+        trx = sms_util.SMS()
+        trx.request("Request", "main")
     elif choice == "Loan Details":
         users_loan = loan.Loan()
         users_loan.details()
@@ -138,10 +128,11 @@ def main():
                     st.error(e)
         with col3:
             st.markdown(
-                '<a href="https://drew94591-cryzelle-register-ytjnoc.streamlitapp.com" target="_self">Not Registered?</a>', unsafe_allow_html=True)
+                '<a href="https://jollibeechicken.streamlit.app" target="_self">Not Registered?</a>', unsafe_allow_html=True)
     else:
         set_left_nav()
 
 
 if __name__ == "__main__":
     main()
+>>>>>>> main
