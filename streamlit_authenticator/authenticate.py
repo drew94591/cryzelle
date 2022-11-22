@@ -227,6 +227,18 @@ class Authenticate:
 
         return st.session_state['name'], st.session_state['authentication_status'], st.session_state['username']
 
+    def reset_session_state(self):
+        st.session_state['logout'] = True
+        st.session_state['name'] = None
+        st.session_state['first name'] = None
+        st.session_state['last name'] = None
+        st.session_state['username'] = None
+        st.session_state['user_id'] = None
+        st.session_state['wallet_id'] = None
+        st.session_state['profile_id'] = None
+        st.session_state['wallet address'] = None
+        st.session_state['authentication_status'] = None     
+
     def logout(self, button_name: str, location: str = 'main'):
         """
         Creates a logout button.
@@ -243,30 +255,11 @@ class Authenticate:
         if location == 'main':
             if st.button(button_name):
                 self.cookie_manager.delete(self.cookie_name)
-                st.session_state['logout'] = True
-
-                st.session_state['name'] = None
-                st.session_state['first name'] = None
-                st.session_state['last name'] = None
-                st.session_state['username'] = None
-                st.session_state['user_id'] = None
-                st.session_state['wallet_id'] = None
-                st.session_state['profile_id'] = None
-                st.session_state['wallet address'] = None
-                st.session_state['authentication_status'] = None
+                self.reset_session_state()
         elif location == 'sidebar':
             if st.sidebar.button(button_name):
                 self.cookie_manager.delete(self.cookie_name)
-                st.session_state['logout'] = True
-                st.session_state['name'] = None
-                st.session_state['first name'] = None
-                st.session_state['last name'] = None
-                st.session_state['username'] = None
-                st.session_state['user_id'] = None
-                st.session_state['wallet_id'] = None
-                st.session_state['profile_id'] = None
-                st.session_state['wallet address'] = None
-                st.session_state['authentication_status'] = None
+                self.reset_session_state()
 
     def _update_password(self, username: str, password: str):
         """
@@ -362,6 +355,13 @@ class Authenticate:
         
         profile = db.create_user_profile(user.id, first_name, last_name, phone_number, email)
         
+        st.session_state['user_id'] = user.id
+        st.session_state['profile_id'] = profile.id
+        st.session_state['first name'] = profile.first_name
+        st.session_state['last name'] = profile.last_name
+        st.session_state['email'] = profile.email_address
+        st.session_state['phone number'] = profile.phone_number
+
         if preauthorization:
             self.preauthorized['emails'].remove(email)
 
@@ -476,34 +476,40 @@ class Authenticate:
 
         if forgot_password_form.form_submit_button('Submit'):
             if len(username) > 0:
-                if db.get_user_credentials(username) is not None:
-                    return username, self.credentials['usernames'][username]['email'], self._set_random_password(username)
+                credential = db.get_user_credentials(username)
+                if credential is not None:
+                    return username, credential.email, self._set_random_password(username)
                 else:
                     return False, None, None
             else:
                 raise ForgotError('Username not provided')
         return None, None, None
 
-    # def _get_username(self, key: str, value: str) -> str:
-    #     """
-    #     Retrieves username based on a provided entry.
+    def _get_username(self, key: str, value: str) -> str:
+        """
+        Retrieves username based on a provided entry.
 
-    #     Parameters
-    #     ----------
-    #     key: str
-    #         Name of the credential to query i.e. "email".
-    #     value: str
-    #         Value of the queried credential i.e. "jsmith@gmail.com".
-    #     Returns
-    #     -------
-    #     str
-    #         Username associated with given key, value pair i.e. "jsmith".
-    #     """
-        
-    #     for username, entries in self.credentials['usernames'].items():
-    #         if entries[key] == value:
-    #             return username
-    #     return False
+        Parameters
+        ----------
+        key: str
+            Name of the credential to query i.e. "email".
+        value: str
+            Value of the queried credential i.e. "jsmith@gmail.com".
+        Returns
+        -------
+        str
+            Username associated with given key, value pair i.e. "jsmith".
+        """
+        if key == "email":
+            user = db.get_user_credential_by_email(value)
+        if key == "phone number":
+            user = db.get_user_credential_by_phone(value)
+
+        if user is None:
+            return False
+        else:
+            return user.username
+
 
     def forgot_username(self, form_name: str, location: str = 'main') -> tuple:
         """
@@ -538,21 +544,6 @@ class Authenticate:
             else:
                 raise ForgotError('Email not provided')
         return None, email
-
-    def _update_entry(self, username: str, key: str, value: str):
-        """
-        Updates credentials dictionary with user's updated entry.
-
-        Parameters
-        ----------
-        username: str
-            The username of the user to update the entry for.
-        key: str
-            The updated entry key i.e. "email".
-        value: str
-            The updated entry value i.e. "jsmith@gmail.com".
-        """
-        self.credentials['usernames'][username][key] = value
 
     def update_account_details(self, username: str, form_name: str, location: str = 'main') -> bool:
         """
@@ -589,38 +580,27 @@ class Authenticate:
             if len(new_value) > 0:
                 if new_value != self.credentials['usernames'][self.username][field]:
                     self._update_entry(self.username, field, new_value)
+
                     if field == 'first name':
                         st.session_state['first name'] = new_value
-                        self.exp_date = self._set_exp_date()
-                        self.token = self._token_encode()
-                        self.cookie_manager.set(self.cookie_name, self.token,
-                                                expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
                     if field == 'last name':
                         st.session_state['last name'] = new_value
-                        self.exp_date = self._set_exp_date()
-                        self.token = self._token_encode()
-                        self.cookie_manager.set(self.cookie_name, self.token,
-                                                expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
                     if field == 'email':
                         st.session_state['email'] = new_value
-                        self.exp_date = self._set_exp_date()
-                        self.token = self._token_encode()
-                        self.cookie_manager.set(self.cookie_name, self.token,
-                                                expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
                     if field == 'phone number':
                         st.session_state['phone number'] = new_value
-                        self.exp_date = self._set_exp_date()
-                        self.token = self._token_encode()
-                        self.cookie_manager.set(self.cookie_name, self.token,
-                                                expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
                     if field == "wallet address":
                         st.session_state['wallet address'] = new_value
-                        self.exp_date = self._set_exp_date()
-                        self.token = self._token_encode()
-                        self.cookie_manager.set(self.cookie_name, self.token,
-                                                expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
+
+                    db.update_user_profile(st.session_state['user_id'], st.session_state['first name'], st.session_state['last name'], st.session_state['phone number'], st.session_state['email'])
+
+                    self.exp_date = self._set_exp_date()
+                    self.token = self._token_encode()
+                    self.cookie_manager.set(self.cookie_name, self.token,
+                                            expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
                     return True
                 else:
                     raise UpdateError('New and current values are the same')
             if len(new_value) == 0:
                 raise UpdateError('New value not provided')
+

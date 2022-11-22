@@ -74,6 +74,56 @@ def get_user_credentials(username):
         connection.close()
     return result
 
+def get_user_credential_by_email(email_address):
+    """
+        Retrieve User Credential by Email
+
+        Parameters
+        ----------
+            email_address: str
+        Returns
+        -------
+        None or Record
+            (id, username, password)
+    """
+
+    result = None
+    engine = get_db_engine()
+    
+    connection = engine.connect()
+    try:
+        stmt = text("SELECT id, username, password FROM users INNER JOIN  user_profiles up ON users.id = up.user_id WHERE email_address = :email")
+        result = connection.execute(stmt, email = email_address).one_or_none()
+    finally:
+        connection.close()
+    return result
+
+
+def get_user_credential_by_phone(phone_number):
+    """
+        Retrieve User Credential by phone number
+
+        Parameters
+        ----------
+            phone_number: str
+        Returns
+        -------
+        None or Record
+            (id, username, password)
+    """
+
+    result = None
+    engine = get_db_engine()
+    
+    connection = engine.connect()
+    try:
+        stmt = text("SELECT id, username, password FROM users INNER JOIN  user_profiles up ON users.id = up.user_id WHERE mobile_number = :phone")
+        result = connection.execute(stmt, phone = phone_number).one_or_none()
+    finally:
+        connection.close()
+    return result
+
+
 def get_user_profile_by_id(userid):
     """
         Retrieves the user profile data.
