@@ -456,7 +456,7 @@ def update_user_profile(id, first_name, last_name, mobile_number, email_address)
         result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id)
 
         stmt = text("SELECT id FROM user_profiles WHERE first_name = :fn AND last_name = :ln AND mobile_number = :cp AND email_address = :email AND id = :upid")
-        result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id)
+        result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id).one_or_none()
         if result is not None:
             output = result.id
         
@@ -490,7 +490,7 @@ def create_wallet(user_id, wallet_nickname, wallet_link, active_indicator=True, 
         result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator)
 
         stmt = text("SELECT id FROM wallet_accounts WHERE wallet_nickname = :nickname AND wallet_link = :link AND user_id = :uid AND active_indicator = :is_active AND default_indicator = :is_default)")
-        result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator)
+        result = connection.execute(stmt, nickname = wallet_nickname, link = wallet_link, uid = user_id, is_active = active_indicator, is_default = default_indicator).one_or_none()
         if result is not None:
             output = result.id
     finally:
@@ -521,7 +521,7 @@ def update_wallet(wallet_id, wallet_nickname, active_indicator, default_indicato
         stmt = text("UPDATE wallet_accounts SET wallet_nickname = :nickname, active_indicator = :is_active, default_indicator = :is_default WHERE id = :wid")
         result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id)
         stmt = text("SELECT id FROM wallet_accounts WHERE wallet_nickname = :nickname AND active_indicator = :is_active AND default_indicator = :is_default AND id = :wid")
-        result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id)
+        result = connection.execute(stmt, nickname = wallet_nickname, is_active = active_indicator, is_default = default_indicator, wid = wallet_id).one_or_none()
         if result is not None:
             output = result.id        
     finally:
@@ -549,7 +549,7 @@ def create_contract(collateral, contract_link):
         stmt = text("INSERT INTO contracts (id, collateral, contract_link) VALUES (nextval('contract_id_seq'), :col, :link)")
         result = connection.execute(stmt, col = collateral, link = contract_link)
         stmt = text("SELECT id from contracts where collateral = :col AND contract_link = :link")
-        result = connection.execute(stmt, col = collateral, link = contract_link)
+        result = connection.execute(stmt, col = collateral, link = contract_link).one_or_none()
         if result is not None:
             output = result.id   
     finally:
@@ -579,9 +579,35 @@ def create_party(contract_id, legal_party_type, legal_party_id):
         stmt = text("INSERT INTO contract_parties (id, contract_id, legal_party_type, legal_party_id) VALUES (nextval('contract_party_id_seq'), :cid, :party_type, :party_id)")
         result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id)
         stmt = text("SELECT id FROM contract_parties WHERE contract_id = :cid AND legal_party_type = :party_type AND legal_party_id = :party_id")
-        result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id)
+        result = connection.execute(stmt, cid = contract_id, party_type = legal_party_type, party_id = legal_party_id).one_or_none()
         if result is not None:
             output = result.id
+    finally:
+        connection.close()
+    return output
+
+
+def is_wallet_available(wallet_address):
+    """
+    finds if a wallet address is alreday associated
+
+    Parameters
+    ----------
+    wallet_address: 
+        
+    Returns
+    -------
+    true or false
+    """
+
+    output = True
+    engine = get_db_engine()
+    connection = engine.connect()
+    try:
+        stmt = text("SELECT id FROM wallet_accounts WHERE wallet_link = :address")
+        result = connection.execute(stmt, address = wallet_address).one_or_none()
+        if result is not None:
+            output = False
     finally:
         connection.close()
     return output

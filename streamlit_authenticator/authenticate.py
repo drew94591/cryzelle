@@ -4,6 +4,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import extra_streamlit_components as stx
 import streamlit_authenticator.db_utils as db
+from streamlit_authenticator.wallet_utils import get_free_wallet_link
 
 from .hasher import Hasher
 from .utils import generate_random_pw
@@ -17,7 +18,7 @@ class Authenticate:
     forgot username, and modify user details widgets.
     """
 
-    def __init__(self, credentials: dict, cookie_name: str, key: str, cookie_expiry_days: int = 30,
+    def __init__(self, cookie_name: str, key: str, cookie_expiry_days: int = 30,
                  preauthorized: list = None):
         """
         Create a new instance of "Authenticate".
@@ -35,9 +36,6 @@ class Authenticate:
         preauthorized: list
             The list of emails of unregistered users authorized to register.
         """
-        self.credentials = credentials
-        self.credentials['usernames'] = {
-            key.lower(): value for key, value in credentials['usernames'].items()}
         self.cookie_name = cookie_name
         self.key = key
         self.cookie_expiry_days = cookie_expiry_days
@@ -350,17 +348,23 @@ class Authenticate:
             False: any user can register.
         """
         
+        wallet_link = get_free_wallet_link()
+        if wallet_link is None:
+                raise RegisterError('No more free wallet available.')
+
         hashed_password = Hasher([password]).generate()[0]
-        user = db.create_user(username, hashed_password)
-        
+        user = db.create_user(username, hashed_password)        
         profile = db.create_user_profile(user.id, first_name, last_name, phone_number, email)
-        
+        wallet = db.create_wallet(user,id, "DEFAULT", wallet_link)
+
         st.session_state['user_id'] = user.id
         st.session_state['profile_id'] = profile.id
         st.session_state['first name'] = profile.first_name
         st.session_state['last name'] = profile.last_name
         st.session_state['email'] = profile.email_address
         st.session_state['phone number'] = profile.phone_number
+        st.session_state['wallet_id'] = wallet.id
+        st.session_state['wallet address'] = wallet_link
 
         if preauthorization:
             self.preauthorized['emails'].remove(email)
@@ -426,24 +430,6 @@ class Authenticate:
             else:
                 raise RegisterError(
                     'Please enter an email, phone number, username, first name, last name, and password')
-
-#     def _set_random_password(self, username: str) -> str:
-#         """
-#         Updates credentials dictionary with user's hashed random password.
-
-#         Parameters
-#         ----------
-#         username: str
-#             Username of user to set random password for.
-#         Returns
-#         -------
-#         str
-#             New plain text password that should be transferred to user securely.
-#         """
-#         self.random_password = generate_random_pw()
-#         self.credentials['usernames'][username]['password'] = Hasher(
-#             [self.random_password]).generate()[0]
-#         return self.random_password
 
     def forgot_password(self, form_name: str, location: str = 'main') -> tuple:
         """
