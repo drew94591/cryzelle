@@ -281,7 +281,7 @@ def get_default_active_user_wallet_by_phone(phone):
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM user INNER JOIN wallet_accounts wallet ON users.id = wallet.user_id INNER JOIN user_profiles up ON users.id = up.user_id WHERE mobile_number = :cp and is_default is true and is_active is true")
+        stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM users INNER JOIN wallet_accounts wallet ON users.id = wallet.user_id INNER JOIN user_profiles up ON users.id = up.user_id WHERE mobile_number = :cp and is_default is true and is_active is true")
 
         result = connection.execute(stmt, cp = phone).one_or_none()
     finally:
@@ -306,7 +306,7 @@ def get_default_active_user_wallet_by_email(email):
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM user INNER JOIN wallet_accounts wallet ON users.id = wallet.user_id INNER JOIN user_profiles up ON users.id = up.user_id WHERE email_address = :email_address AND is_default is true AND is_active is true")
+        stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM users INNER JOIN wallet_accounts wallet ON users.id = wallet.user_id INNER JOIN user_profiles up ON users.id = up.user_id WHERE email_address = :email_address AND is_default is true AND is_active is true")
 
         result = connection.execute(stmt, email_address = email).one_or_none()
     finally:
