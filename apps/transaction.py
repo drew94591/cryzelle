@@ -10,9 +10,6 @@ from web3 import Web3
 w3 = Web3(Web3.HTTPProvider('HTTP://52.87.239.109:8545'))
 
 
-# Load .env envrionment variables
-load_dotenv()
-
 class Transaction:
     from_account = Account()
     to_account = Account()
@@ -20,6 +17,9 @@ class Transaction:
     tx_date = dt.datetime
 
     def send(self, location: str = 'main'):
+        # Load .env envrionment variables
+        load_dotenv()
+
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
         auth_token = os.environ['TWILIO_AUTH_TOKEN']
         twilio_phone_number = os.environ['TWILIO_PHONE_NUMBER']
