@@ -51,13 +51,11 @@ class SMS:
                             from_=twilio_phone_number,
                             to=to_phone_number
                         )
+                    with placeholder.container():
+                        st.info("Message sent successfully!")
                 except:
                     with placeholder.container():
                         st.error("Unable to send message!")
-                else:
-                    with placeholder.container():
-                        st.info("Message sent successfully!")
-
 
 
     def request(self, control_name: str, location: str = 'main'):
@@ -114,5 +112,5 @@ class SMS:
                         st.info(f"Message sent successfully! Please wait for {friend_information[0]} to sign-on and check on your request.")
                 except:
                     with placeholder.container():
-                        st.error("You've entered an invalid phone number!")
+                        st.error("Unable to send message!")
                     
