@@ -16,7 +16,7 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 * [JSON](https://www.json.org/json-en.html) - Used for serializing structured data and exchanging it over a network, typically between a server and web applications.
 
-* [Ganache](https://trufflesuite.com/ganache/) - ​​A program that allows you to quickly set up a local blockchain, which you can use to test and develop smart contracts.
+* [Ganache](https://trufflesuite.com/ganache/) - A program that allows you to quickly set up a local blockchain, which you can use to test and develop smart contracts.
 
 * [PostgreSQL] (https://www.postgresql.org/) To create new database.
 
@@ -35,12 +35,12 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 # Contributors
 
-- Theena Dang
-- Drew Herrera
-- Agnes Maria
-- Nayana Narayanan
-- Matthew Stream
-- Hugo Velazquez 
+- [Theena Dang](https://github.com/Th33na)
+- [Drew Herrera](https://github.com/drew94591)
+- [Agnes Maria](https://github.com/agnesmaria1)
+- [Nayana Narayanan](https://github.com/nayananarayananp)
+- [Matthew Stream](https://github.com/MC-Stream)
+- [Hugo Velazquez](https://github.com/HugoWLA)
 
 # License
 [MIT](license)
