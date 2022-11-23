@@ -63,7 +63,7 @@ class Transaction:
 
 
                     else:
-                        destination_account = friend_information.wallet_link
+                        _, _, destination_account = friend_information
                         try:
                             # Set gas price strategy
                             w3.eth.setGasPriceStrategy(medium_gas_price_strategy)
