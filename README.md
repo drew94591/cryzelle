@@ -1,10 +1,8 @@
-# Cryzelle
-Customers can access the Cryzelle app and register as new users. Once enrolled, users simply need to know each other's phone number or email address in order to send or receive cryptocurrencies instantaneously. Additionally, logged-in users can view their whole transaction history. It can also invite their loved ones to sign up for the bitcoin industry.
+# Cryzelle                                                                                                                   ![cryzellelogo.png](Images/cryzellelogo.png)
+If you want to transfer someone cryptocurrency but you don't remember their 64-character hexadecimal wallet address, what can you do? Do not be alarmed— Cryzelle is here Customers can access the Cryzelle app and register as new users. Once enrolled, users simply need to know each other's phone number or email address in order to send or receive cryptocurrencies instantaneously. Additionally, logged-in users can view their whole transaction history. It can also invite their loved ones to sign up for the bitcoin. the transfer of cryptocurrency using a blockchain transaction to an external wallet or another exchange, utilizing the user's registered email address or phone number for their Ethereum wallet as the "destination address" (the address to which they want to send their bitcoin). We are also integrating Ganache with our project app and leveraging AWS to construct conversations that will serve as data input for transaction information. industry.
 
 ## Technologies
 This project utilizes a lot of different add ons, please make sure you have all these and they are up to date:
-
-* [pandas 1.4.3](https://github.com/pandas-dev/pandas/blob/main/README.md) - For reading the csv files and other operations.
 
 * [VSCode](https://code.visualstudio.com/) - Code editor redefined and optimized for building and debugging modern web and cloud applications.
 
@@ -12,7 +10,7 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 * [haslib](https://docs.python.org/3/library/hashlib.html) - Secure hash and message digest algorithm library.
 
-* [Web3.py](https://web3py.readthedocs.io/en/stable/overview.html) - A Python library for connecting to and performing operations on Ethereum-based blockchains.
+* [Web3](https://web3.foundation/) - A Python library for connecting to and performing operations on Ethereum-based blockchains.
 
 * [ethereum-tester](https://pypi.org/project/ethereum-tester/0.1.0a4/) - A Python library that provides access to the tools we’ll use to test Ethereum-based applications.
 
@@ -20,14 +18,17 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 * [Ganache](https://trufflesuite.com/ganache/) - ​​A program that allows you to quickly set up a local blockchain, which you can use to test and develop smart contracts.
 
-![image](https://user-images.githubusercontent.com/105394703/193184354-0d034e41-599d-41c9-9bfd-2cef182bfb09.png)
+* [PostgreSQL] (https://www.postgresql.org/) To create new database.
 
-![image](https://user-images.githubusercontent.com/105394703/194219443-706b99d6-7c75-4ff0-926a-a2c911993529.png)
+* [AWS S3](https://aws.amazon.com/)
 
+* [TruffleSuite] (https://trufflesuite.com/)
 
+* [Twilio] (https://www.twilio.com/)
 
-
-## Installation
+## Screenshots
+![chorizoburrito.png](Images/chorizoburrito.png)
+![jollibeechicken.streamlit.png](Images/jollibeechicken.streamlit.png)
 
 
 # Future Upgrades
