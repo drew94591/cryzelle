@@ -36,11 +36,13 @@ class Authenticate:
         preauthorized: list
             The list of emails of unregistered users authorized to register.
         """
-        self.cookie_name = cookie_name
-        self.key = key
-        self.cookie_expiry_days = cookie_expiry_days
-        self.preauthorized = preauthorized
-        self.cookie_manager = stx.CookieManager()
+        # self.cookie_name = cookie_name
+        # self.key = key
+        # self.cookie_expiry_days = cookie_expiry_days
+        # self.preauthorized = preauthorized
+        # self.cookie_manager = stx.CookieManager()
+
+        self.reset_session_state()
 
         if 'name' not in st.session_state:
             st.session_state['name'] = None
@@ -150,7 +152,6 @@ class Authenticate:
         user_credential = db.get_user_credentials(self.username)
         
         if user_credential is not None and user_credential.username == self.username:
-            
             try:
                 if self._check_pw(user_credential.password):
                     if inplace:
@@ -207,7 +208,7 @@ class Authenticate:
         if location not in ['main', 'sidebar']:
             raise ValueError("Location must be one of 'main' or 'sidebar'")
         if not st.session_state['authentication_status']:
-            self._check_cookie()
+            # self._check_cookie()
             if not st.session_state['authentication_status']:
                 if location == 'main':
                     login_form = st.form('Login')
@@ -224,6 +225,18 @@ class Authenticate:
                     self._check_credentials()
 
         return st.session_state['name'], st.session_state['authentication_status'], st.session_state['username']
+
+    def refresh_session_state(self, name, first_name, last_name, username, user_id, wallet_id, profile_id, wallet_address, authentication_status):
+        st.session_state['logout'] = False
+        st.session_state['name'] = name
+        st.session_state['first name'] = first_name
+        st.session_state['last name'] = last_name
+        st.session_state['username'] = username
+        st.session_state['user_id'] = user_id
+        st.session_state['wallet_id'] = wallet_id
+        st.session_state['profile_id'] = profile_id
+        st.session_state['wallet address'] = wallet_address
+        st.session_state['authentication_status'] = authentication_status  
 
     def reset_session_state(self):
         st.session_state['logout'] = True
@@ -252,11 +265,11 @@ class Authenticate:
             raise ValueError("Location must be one of 'main' or 'sidebar'")
         if location == 'main':
             if st.button(button_name):
-                self.cookie_manager.delete(self.cookie_name)
+                # self.cookie_manager.delete(self.cookie_name)
                 self.reset_session_state()
         elif location == 'sidebar':
             if st.sidebar.button(button_name):
-                self.cookie_manager.delete(self.cookie_name)
+                # self.cookie_manager.delete(self.cookie_name)
                 self.reset_session_state()
 
     def _update_password(self, username: str, password: str):
@@ -582,8 +595,8 @@ class Authenticate:
 
                     self.exp_date = self._set_exp_date()
                     self.token = self._token_encode()
-                    self.cookie_manager.set(self.cookie_name, self.token,
-                                            expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
+                    # self.cookie_manager.set(self.cookie_name, self.token,
+                    #                         expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
                     return True
                 else:
                     raise UpdateError('New and current values are the same')
