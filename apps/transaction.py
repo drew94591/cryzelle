@@ -26,7 +26,7 @@ class Transaction:
         client = Client(account_sid, auth_token)
         placeholder = st.empty()
         placeholder.empty()
-        friend_information = None
+        friend_information = []
 
         if location == 'main':
 
