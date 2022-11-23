@@ -559,12 +559,12 @@ class Authenticate:
         update_account_details_form.subheader(form_name)
         self.username = username.lower()
         field = update_account_details_form.selectbox(
-            'Field', ['First Name', 'Last Name', 'Email', 'Phone Number', 'Wallet Address']).lower()
+            'Field', ['First Name', 'Last Name', 'Email', 'Phone Number']).lower()
         new_value = update_account_details_form.text_input('New value')
 
         if update_account_details_form.form_submit_button('Update'):
             if len(new_value) > 0:
-                if new_value != self.credentials['usernames'][self.username][field]:
+                if new_value != st.session_state[field]:
                     self._update_entry(self.username, field, new_value)
 
                     if field == 'first name':
@@ -575,8 +575,6 @@ class Authenticate:
                         st.session_state['email'] = new_value
                     if field == 'phone number':
                         st.session_state['phone number'] = new_value
-                    if field == "wallet address":
-                        st.session_state['wallet address'] = new_value
 
                     db.update_user_profile(st.session_state['user_id'], st.session_state['first name'], st.session_state['last name'], st.session_state['phone number'], st.session_state['email'])
 
