@@ -282,9 +282,7 @@ def get_default_active_user_wallet_by_phone(phone):
     connection = engine.connect()
     try:
         stmt = text("SELECT wallet.id, wallet_nickname, wallet_link FROM users INNER JOIN wallet_accounts wallet ON users.id = wallet.user_id INNER JOIN user_profiles up ON wallet.user_id = up.user_id WHERE mobile_number = :cp and is_default is true and is_active is true")
-        output = connection.execute(stmt, cp = phone).one_or_none()
-        if output is not None:
-            result = [output.id, output.wallet_nickname, output.wallet_link] 
+        result = connection.execute(stmt, cp = phone).one_or_none()
     finally:
         connection.close()
     return result

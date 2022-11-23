@@ -26,7 +26,7 @@ class Transaction:
         client = Client(account_sid, auth_token)
         placeholder = st.empty()
         placeholder.empty()
-        friend_information = []
+        friend_information = None
 
         if location == 'main':
 
@@ -43,12 +43,10 @@ class Transaction:
             
             if st.button("SEND"):
 
-                st.write(f'original: {input_phone_number}')
                 for i in input_phone_number:
                     if i.isnumeric():
                         phone_number = phone_number + i
 
-                st.write(f'updated: {phone_number}')
                 if len(phone_number) > 10:
                     if phone_number[0] == "1":
                         phone_number = phone_number[1:]
@@ -57,13 +55,11 @@ class Transaction:
 
                 if len(phone_number) == 10:
                     friend_information = get_default_active_user_wallet_by_phone(phone_number)
-                    st.write(friend_information)
                     if friend_information is None:
                         st.write(f"We could not find {phone_number} in our database.")
 
-
                     else:
-                        _, _, destination_account = friend_information
+                        destination_account = friend_information.wallet_link
                         try:
                             # Set gas price strategy
                             w3.eth.setGasPriceStrategy(medium_gas_price_strategy)
@@ -85,6 +81,7 @@ class Transaction:
 
                             # Sign the raw transaction with ethereum account
                             sent_txn = w3.eth.send_transaction(raw_tx)
+                            st.write(sent_txn)
 
                             body_msg = (f"Hello {friend_information[0]}, {st.session_state['first name']} {st.session_state['last name']} sent you {amount} Eth."
                                         f" Please sign in to your account to check your current balance.")
@@ -99,7 +96,7 @@ class Transaction:
                                 st.info(f"Your friend received a Message for transaction: {sent_txn}.")
                         except:
                             with placeholder.container():
-                                st.error("You've entered an invalid phone number!")
+                                st.error("Unable to send transaction!")
 
 
     def request(self):
