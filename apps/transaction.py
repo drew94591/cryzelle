@@ -21,6 +21,8 @@ class Transaction:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
+        st.text(" \n")
+        st.text(" \n")
         # Load .env envrionment variables
         load_dotenv()
 

@@ -13,6 +13,8 @@ class Loan:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
+        st.text(" \n")
+        st.text(" \n")
         st.write("Details on how to package a loan here...")
         if st.button("Package A Loan"):
             self.package_loan()
