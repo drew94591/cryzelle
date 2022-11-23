@@ -36,17 +36,19 @@ class Transaction:
             st.write("Please enter the phone number for a friend that is in our network.")
             st.write("Followed by the amount you would like to send in Eth.")
             st.text(" \n")
-            input_phone_number = st.text_input("Friend's Phone Number")
+            input_phone_number = st.text_input("Friend's Phone Number", max_chars=10)
             amount = st.text_input("Amount you wish to send.")
             phone_number = ""
             source_account = st.session_state['wallet address']
             
             if st.button("SEND"):
 
+                st.write(f'original: {input_phone_number}')
                 for i in input_phone_number:
                     if i.isnumeric():
                         phone_number = phone_number + i
 
+                st.write(f'updated: {phone_number}')
                 if len(phone_number) > 10:
                     if phone_number[0] == "1":
                         phone_number = phone_number[1:]
