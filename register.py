@@ -19,7 +19,7 @@ authenticator = stauth.Authenticate(
 try:
     if authenticator.register_user('Register user', preauthorization=False):
         st.success('User registered successfully!')
-        st.markdown('<a href="https://chorizoburrito.streamlitapp.com" target="_self">Login</a>',
+        st.markdown('<a href="https://chorizoburrito.streamlit.app" target="_self">Login</a>',
                     unsafe_allow_html=True)
 except Exception as e:
     st.error(e)
