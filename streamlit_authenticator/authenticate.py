@@ -564,17 +564,9 @@ class Authenticate:
 
         if update_account_details_form.form_submit_button('Update'):
             if len(new_value) > 0:
-                if new_value != st.session_state[field]:
-                    self._update_entry(self.username, field, new_value)
-
-                    if field == 'first name':
-                        st.session_state['first name'] = new_value
-                    if field == 'last name':
-                        st.session_state['last name'] = new_value
-                    if field == 'email':
-                        st.session_state['email'] = new_value
-                    if field == 'phone number':
-                        st.session_state['phone number'] = new_value
+                key = field.lower()
+                if new_value != st.session_state[key]:
+                    st.session_state[key] = new_value
 
                     db.update_user_profile(st.session_state['user_id'], st.session_state['first name'], st.session_state['last name'], st.session_state['phone number'], st.session_state['email'])
 
