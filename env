@@ -1,6 +1,0 @@
-DATABASE_URL = "postgresql://cryptozelle:ZelleForCrypto2022!@cryzelle.cawt9r3otz7c.us-west-2.rds.amazonaws.com:5432/cryzelle"
-DATABASE_SCHEMA = "public"
-TWILIO_ACCOUNT_SID = "AC4515ae3126c1de1a92e7ac43bb1e0994"
-TWILIO_AUTH_TOKEN = "bd3540318926b891b850c6b894986dac"
-TWILIO_PHONE_NUMBER = "+18316035984"
-
