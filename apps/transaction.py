@@ -24,5 +24,5 @@ class Transaction:
         st.write(f'Wallet Address: {wallet_address}')
         st.write(f'Wallet Balance: {ether_amount} ETH')
 
-        st.write(w3.eth.get_block(full_transactions=True))
+        st.write(w3.eth.get_transaction_count(wallet_address))
 
