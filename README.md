@@ -18,9 +18,9 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 * [JSON](https://www.json.org/json-en.html) - Used for serializing structured data and exchanging it over a network, typically between a server and web applications.
 
-* [Ganache](https://trufflesuite.com/ganache/) - ​​A program that allows you to quickly set up a local blockchain, which you can use to test and develop smart contracts.
+* [Ganache](https://trufflesuite.com/ganache/) - A program that allows you to quickly set up a local blockchain, which you can use to test and develop smart contracts.
 
-![image](https://user-images.githubusercontent.com/105394703/193184354-0d034e41-599d-41c9-9bfd-2cef182bfb09.png)
+![python logo](https://user-images.githubusercontent.com/105394703/203470024-398b7ed0-16b4-4ae3-b281-58d27e9e5393.jpg)
 
 ![image](https://user-images.githubusercontent.com/105394703/194219443-706b99d6-7c75-4ff0-926a-a2c911993529.png)
 
@@ -34,12 +34,12 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 # Contributors
 
-- Theena Dang
-- Drew Herrera
-- Agnes Maria
-- Nayana Narayanan
-- Matthew Stream
-- Hugo Velazquez 
+- [Theena Dang](https://github.com/Th33na)
+- [Drew Herrera](https://github.com/drew94591)
+- [Agnes Maria](https://github.com/agnesmaria1)
+- [Nayana Narayanan](https://github.com/nayananarayananp)
+- [Matthew Stream](https://github.com/MC-Stream)
+- [Hugo Velazquez](https://github.com/HugoWLA)
 
 # License
 [MIT](license)
