@@ -285,6 +285,7 @@ def get_default_active_user_wallet_by_phone(phone):
         st.write(stmt)
         st.write(phone)
         result = connection.execute(stmt, cp = phone).one_or_none()
+        st.write(result)
     finally:
         connection.close()
     return result
