@@ -1,5 +1,6 @@
 import streamlit as st
 from .account import Account
+from PIL import Image
 
 
 class User:
@@ -54,6 +55,9 @@ class User:
         self.account = new_account
 
     def search(self, control_name: str, location: str = 'main'):
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
         if location == 'main':
             input_val = st.text_input("Enter a phone number or email address")
 
