@@ -1,4 +1,6 @@
-                                                                                    ![Logo.png](Screenshots/Logo.png)
+![cryzelle](https://user-images.githubusercontent.com/105394703/203482962-f7d647ab-71dd-42dc-bbd9-06f524eaef1b.png)
+
+
 If you want to transfer someone cryptocurrency but you don't remember their 64-character hexadecimal wallet address, what can you do? Do not be alarmed— Cryzelle is here Customers can access the Cryzelle app and register as new users. Once enrolled, users simply need to know each other's phone number or email address in order to send or receive cryptocurrencies instantaneously. Additionally, logged-in users can view their whole transaction history. It can also invite their loved ones to sign up for the bitcoin. the transfer of cryptocurrency using a blockchain transaction to an external wallet or another exchange, utilizing the user's registered email address or phone number for their Ethereum wallet as the "destination address" (the address to which they want to send their bitcoin). We are also integrating Ganache with our project app and leveraging AWS to construct conversations that will serve as data input for transaction information. industry.
 
 ## Technologies
@@ -18,13 +20,13 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 * [Ganache](https://trufflesuite.com/ganache/) - A program that allows you to quickly set up a local blockchain, which you can use to test and develop smart contracts.
 
-* [PostgreSQL] (https://www.postgresql.org/) To create new database.
+* [PostgreSQL](https://www.postgresql.org/) - To create new database.
 
-* [AWS S3](https://aws.amazon.com/)
+* [AWS S3](https://aws.amazon.com/) - Object storage service that stores data.
 
-* [TruffleSuite] (https://trufflesuite.com/)
+* [TruffleSuite](https://trufflesuite.com/) -  Development environment, testing framework, and asset pipeline for Ethereum.
 
-* [Twilio] (https://www.twilio.com/)
+* [Twilio](https://www.twilio.com/) - Communication tools for making and receiving phone calls, sending and receiving text messages, and performing other communication functions using its web service APIs.
 
 ## Screenshots
 ![chorizoburrito.png](Screenshots/chorizoburrito.png)
