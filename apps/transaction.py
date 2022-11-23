@@ -18,11 +18,13 @@ class Transaction:
 	
     def history(self):
         wallet_address = st.session_state['wallet address']
+
         wei_balance = w3.eth.get_balance(wallet_address)
         # Convert Wei value to ether
         ether_amount = w3.fromWei(wei_balance, "ether")
+
+        transaction_count = w3.eth.get_transaction_count(wallet_address)
+
         st.write(f'Wallet Address: {wallet_address}')
         st.write(f'Wallet Balance: {ether_amount} ETH')
-
-        st.write(w3.eth.get_transaction_count(wallet_address))
-
+        st.write(f'Total number of Transactions: {transaction_count}')
