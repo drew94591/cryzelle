@@ -17,5 +17,10 @@ class Transaction:
         st.write("In Transaction Request Page...")
 	
     def history(self):
-        st.write(f"You have {w3.eth.getTransactionCount(st.session_state['wallet address'])} total transactions")
-        st.write(f"Your current balance is: {w3.eth.get_balance(st.session_state['wallet address'])}")
+        wallet_address = st.session_state['wallet address']
+        wei_balance = w3.eth.get_balance(wallet_address)
+        # Convert Wei value to ether
+        ether_amount = w3.fromWei(wei_balance, "ether")
+        st.write(f'Wallet Address: {wallet_address}')
+        st.write(f'Wallet Balance: {ether_amount} ETH')
+
