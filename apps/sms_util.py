@@ -11,6 +11,8 @@ class SMS:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
+        st.text(" \n")
+        st.text(" \n")
         # Load .env envrionment variables
         load_dotenv()
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
@@ -66,6 +68,8 @@ class SMS:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
+        st.text(" \n")
+        st.text(" \n")
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
         auth_token = os.environ['TWILIO_AUTH_TOKEN']
         messaging_service_id = os.environ['TWILIO_MESSAGING_SERVICE_ID']

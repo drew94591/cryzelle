@@ -58,6 +58,8 @@ class User:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
+        st.text(" \n")
+        st.text(" \n")
         if location == 'main':
             input_val = st.text_input("Enter a phone number or email address")
 
