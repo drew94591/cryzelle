@@ -2,7 +2,7 @@ import streamlit as st
 import datetime as dt
 from .account import Account
 from web3 import Web3
-w3 = Web3(Web3.HTTPProvider('HTTP://127.0.0.1:7545'))
+w3 = Web3(Web3.HTTPProvider('HTTP://52.87.239.109:8545'))
 
 class Transaction:
     from_account = Account()
@@ -17,4 +17,5 @@ class Transaction:
         st.write("In Transaction Request Page...")
 	
     def history(self):
-        st.write(w3.eth.getTransaction(st.session_state['wallet address']))
+        st.write(f"You have {w3.eth.getTransactionCount(st.session_state['wallet address'])} total transactions")
+        st.write(f"Your current balance is: {w3.eth.get_balance(st.session_state['wallet address'])}")
