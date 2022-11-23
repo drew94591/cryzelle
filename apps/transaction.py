@@ -57,50 +57,49 @@ class Transaction:
 
                 if len(phone_number) == 10:
                     friend_information = get_default_active_user_wallet_by_phone(phone_number)
+                    st.write(friend_information)
+                    if friend_information is None:
+                        st.write(f"We could not find {phone_number} in our database.")
 
-                
-                if friend_information is None:
-                    st.write(f"We could not find {phone_number} in our database.")
 
+                    else:
+                        destination_account = friend_information.wallet_link
+                        try:
+                            # Set gas price strategy
+                            w3.eth.setGasPriceStrategy(medium_gas_price_strategy)
 
-                else:
-                    destination_account = friend_information.wallet_link
-                    try:
-                        # Set gas price strategy
-                        w3.eth.setGasPriceStrategy(medium_gas_price_strategy)
+                            # Convert eth amount to Wei
+                            value = w3.toWei(amount, "ether")
 
-                        # Convert eth amount to Wei
-                        value = w3.toWei(amount, "ether")
+                            # Calculate gas estimate
+                            gasEstimate = w3.eth.estimateGas({"to": destination_account, "from": source_account, "value": value})
 
-                        # Calculate gas estimate
-                        gasEstimate = w3.eth.estimateGas({"to": destination_account, "from": source_account, "value": value})
+                            # Construct a raw transaction
+                            raw_tx = {
+                                "to": destination_account,
+                                "from": source_account,
+                                "value": value,
+                                "gas": gasEstimate,
+                                "gasPrice": 0
+                            }
 
-                        # Construct a raw transaction
-                        raw_tx = {
-                            "to": destination_account,
-                            "from": source_account,
-                            "value": value,
-                            "gas": gasEstimate,
-                            "gasPrice": 0
-                        }
+                            # Sign the raw transaction with ethereum account
+                            sent_txn = w3.eth.send_transaction(raw_tx)
 
-                        # Sign the raw transaction with ethereum account
-                        sent_txn = w3.eth.send_transaction(raw_tx)
-
-                        body_msg = (f"Hello {friend_information[0]}, {st.session_state['first name']} {st.session_state['last name']} sent you {amount} Eth."
-                                    f" Please sign in to your account to check your current balance.")
-                        to_phone_number = f"+1{phone_number}"
-                        message = client.messages \
-                            .create(
-                                body=body_msg,
-                                from_=twilio_phone_number,
-                                to=to_phone_number
-                            )
-                        with placeholder.container():
-                            st.info(f"Your friend received a Message for transaction: {sent_txn}.")
-                    except:
-                        with placeholder.container():
-                            st.error("You've entered an invalid phone number!")
+                            body_msg = (f"Hello {friend_information[0]}, {st.session_state['first name']} {st.session_state['last name']} sent you {amount} Eth."
+                                        f" Please sign in to your account to check your current balance.")
+                            to_phone_number = f"+1{phone_number}"
+                            message = client.messages \
+                                .create(
+                                    body=body_msg,
+                                    from_=twilio_phone_number,
+                                    to=to_phone_number
+                                )
+                            with placeholder.container():
+                                st.info(f"Your friend received a Message for transaction: {sent_txn}.")
+                        except:
+                            with placeholder.container():
+                                st.error("You've entered an invalid phone number!")
 
 
     def request(self):
