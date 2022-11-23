@@ -84,6 +84,8 @@ def main():
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
+        st.text(" \n")
+        st.text(" \n")
 
         # creating a login widget
         name, authentication_status, username = authenticator.login(
