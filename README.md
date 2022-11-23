@@ -20,7 +20,7 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 * [Ganache](https://trufflesuite.com/ganache/) - A program that allows you to quickly set up a local blockchain, which you can use to test and develop smart contracts.
 
-![python logo](https://user-images.githubusercontent.com/105394703/203470024-398b7ed0-16b4-4ae3-b281-58d27e9e5393.jpg)
+![python-logo-master-v3-TM-flattened](https://user-images.githubusercontent.com/105394703/203470593-f1ffee4b-d429-4c3d-80b6-896fd7138a2d.png)
 
 ![image](https://user-images.githubusercontent.com/105394703/194219443-706b99d6-7c75-4ff0-926a-a2c911993529.png)
 
