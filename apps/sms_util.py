@@ -3,10 +3,14 @@ from dotenv import load_dotenv
 from twilio.rest import Client
 import streamlit as st
 from streamlit_authenticator.db_utils import get_user_profile_by_phone
+from PIL import Image
 
 
 class SMS:
     def invite(self, control_name: str, location: str = 'main'):
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
         # Load .env envrionment variables
         load_dotenv()
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
@@ -59,6 +63,9 @@ class SMS:
                         st.error("Unable to send message!")
 
     def request(self, control_name: str, location: str = 'main'):
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
         auth_token = os.environ['TWILIO_AUTH_TOKEN']
         messaging_service_id = os.environ['TWILIO_MESSAGING_SERVICE_ID']

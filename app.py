@@ -6,6 +6,7 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml import SafeLoader
+from PIL import Image
 from apps import user, home_page, account, wallet, loan, sms_util, transaction, find_a_friend
 
 st.set_page_config(
@@ -79,6 +80,10 @@ def main():
     if not st.session_state["authentication_status"]:
         #hashed_passwords = stauth.Hasher(['SecretPassword55']).generate()
         #st.write(f'hashed_passwords: {hashed_passwords}')
+
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
 
         # creating a login widget
         name, authentication_status, username = authenticator.login(

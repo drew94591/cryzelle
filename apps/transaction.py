@@ -1,3 +1,4 @@
+from PIL import Image
 import os
 from dotenv import load_dotenv
 import streamlit as st
@@ -17,12 +18,15 @@ class Transaction:
     tx_date = dt.datetime
 
     def send(self, location: str = 'main'):
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
         # Load .env envrionment variables
         load_dotenv()
 
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
         auth_token = os.environ['TWILIO_AUTH_TOKEN']
-        twilio_phone_number = os.environ['TWILIO_PHONE_NUMBER']
+        messaging_service_id = os.environ['TWILIO_MESSAGING_SERVICE_ID']
         client = Client(account_sid, auth_token)
         placeholder = st.empty()
         placeholder.empty()
@@ -33,14 +37,16 @@ class Transaction:
             st.markdown("# Send Crypto from a Friend")
             st.text(" \n")
             st.text(" \n")
-            st.write("Please enter the phone number for a friend that is in our network.")
+            st.write(
+                "Please enter the phone number for a friend that is in our network.")
             st.write("Followed by the amount you would like to send in Eth.")
             st.text(" \n")
-            input_phone_number = st.text_input("Friend's Phone Number", max_chars=10)
+            input_phone_number = st.text_input(
+                "Friend's Phone Number", max_chars=10)
             amount = st.text_input("Amount you wish to send.")
             phone_number = ""
             source_account = st.session_state['wallet address']
-            
+
             if st.button("SEND"):
 
                 for i in input_phone_number:
@@ -51,24 +57,29 @@ class Transaction:
                     if phone_number[0] == "1":
                         phone_number = phone_number[1:]
                     else:
-                        st.write("The phone number is too long, please try again.")
+                        st.write(
+                            "The phone number is too long, please try again.")
 
                 if len(phone_number) == 10:
-                    friend_information = get_default_active_user_wallet_by_phone(phone_number)
+                    friend_information = get_default_active_user_wallet_by_phone(
+                        phone_number)
                     if friend_information is None:
-                        st.write(f"We could not find {phone_number} in our database.")
+                        st.write(
+                            f"We could not find {phone_number} in our database.")
 
                     else:
                         destination_account = friend_information.wallet_link
                         try:
                             # Set gas price strategy
-                            w3.eth.setGasPriceStrategy(medium_gas_price_strategy)
+                            w3.eth.setGasPriceStrategy(
+                                medium_gas_price_strategy)
 
                             # Convert eth amount to Wei
                             value = w3.toWei(amount, "ether")
 
                             # Calculate gas estimate
-                            gasEstimate = w3.eth.estimateGas({"to": destination_account, "from": source_account, "value": value})
+                            gasEstimate = w3.eth.estimateGas(
+                                {"to": destination_account, "from": source_account, "value": value})
 
                             # Construct a raw transaction
                             raw_tx = {
@@ -88,21 +99,27 @@ class Transaction:
                             to_phone_number = f"+1{phone_number}"
                             message = client.messages \
                                 .create(
+                                    messaging_service_sid=messaging_service_id,
                                     body=body_msg,
-                                    from_=twilio_phone_number,
                                     to=to_phone_number
                                 )
                             with placeholder.container():
-                                st.info(f"Your friend received a Message for transaction: {sent_txn}.")
+                                st.info(
+                                    f"Your friend received a Message for transaction: {sent_txn}.")
                         except:
                             with placeholder.container():
                                 st.error("Unable to send transaction!")
 
-
     def request(self):
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
         st.write("In Transaction Request Page...")
-	
+
     def history(self):
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
         wallet_address = st.session_state['wallet address']
 
         wei_balance = w3.eth.get_balance(wallet_address)

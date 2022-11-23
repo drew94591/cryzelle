@@ -1,8 +1,13 @@
 import streamlit as st
 from streamlit_authenticator.db_utils import get_user_profile_by_phone, get_user_profile_by_email
+from PIL import Image
+
 
 class Friend:
     def search(self):
+        # Image Logo
+        image = Image.open('images/cryzelle1.jpeg')
+        st.image(image)
         st.markdown("# Find a Friend")
         st.text(" \n")
         st.text(" \n")
@@ -55,6 +60,6 @@ class Friend:
                 st.write("Mobile Number: ", friend_information[2])
                 st.write("Email: ", friend_information[3])
                 st.text(" \n")
-                
+
             elif friend_information == None:
                 st.write(f"We could not find {friend} in our database.")
