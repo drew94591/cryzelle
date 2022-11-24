@@ -40,14 +40,16 @@ This project utilizes a lot of different add ons, please make sure you have all 
 ![Database.png](Screenshots/Database.png)
 ![chorizoburrito.png](Screenshots/chorizoburrito.png)
 ![jollibeechicken.streamlit.png](Screenshots/jollibeechicken.streamlit.png)
+![Transaction.png](Screenshots/Transaction.png)
+
 
 # Future Upgrades
-* Control raw SQL queries into Object Relational Mapper.
-* Adding multiple wallet addresses for an account.
-* To show all the wallet transactions.
-* IOUcoins and loans.
-* User friend system.
-* Request/Send actionable items from their friends directly.
+Control raw SQL queries into Object Relational Mapper.
+Adding multiple wallet addresses for an account.
+To show all the wallet transactions.
+IOUcoins and loans.
+User friend system.
+Request/Send actionable items from their friends directly.
 
 # Contributors
 
