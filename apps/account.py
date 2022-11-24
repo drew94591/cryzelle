@@ -14,8 +14,6 @@ class Account:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
-        st.text(" \n")
-        st.text(" \n")
         st.title(f'Welcome *{st.session_state["first name"]}*')
         st.write(f'User Name: {st.session_state["username"]}')
         st.write(

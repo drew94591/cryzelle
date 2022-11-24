@@ -21,8 +21,6 @@ class Transaction:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
-        st.text(" \n")
-        st.text(" \n")
         # Load .env envrionment variables
         load_dotenv()
 
@@ -122,6 +120,8 @@ class Transaction:
         # Image Logo
         image = Image.open('images/cryzelle1.jpeg')
         st.image(image)
+        st.text(" \n")
+        st.text(" \n")
         wallet_address = st.session_state['wallet address']
 
         wei_balance = w3.eth.get_balance(wallet_address)
