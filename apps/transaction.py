@@ -94,7 +94,7 @@ class Transaction:
                             sent_txn = w3.eth.send_transaction(raw_tx)
                             st.write(sent_txn)
 
-                            body_msg = (f"Hello {friend_information[0]}, {st.session_state['first name']} {st.session_state['last name']} sent you {amount} Eth."
+                            body_msg = (f"Hello {friend_information[3]}, {st.session_state['first name']} {st.session_state['last name']} sent you {amount} Eth."
                                         f" Please sign in to your account to check your current balance.")
                             to_phone_number = f"+1{phone_number}"
                             message = client.messages \
