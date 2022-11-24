@@ -451,10 +451,10 @@ def update_user_profile(id, first_name, last_name, mobile_number, email_address)
     engine = get_db_engine()
     connection = engine.connect()
     try:
-        stmt = text("UPDATE user_profiles SET first_name = :fn, last_name = :ln, mobile_number = :cp, email_address = :email WHERE id = :upid")
+        stmt = text("UPDATE user_profiles SET first_name = :fn, last_name = :ln, mobile_number = :cp, email_address = :email WHERE user_id = :upid")
         result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id)
 
-        stmt = text("SELECT id FROM user_profiles WHERE first_name = :fn AND last_name = :ln AND mobile_number = :cp AND email_address = :email AND id = :upid")
+        stmt = text("SELECT id FROM user_profiles WHERE first_name = :fn AND last_name = :ln AND mobile_number = :cp AND email_address = :email AND user_id = :upid")
         result = connection.execute(stmt, fn = first_name, ln = last_name, cp = mobile_number, email = email_address, upid = id).one_or_none()
         if result is not None:
             output = result.id
