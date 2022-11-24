@@ -1,4 +1,6 @@
+
 ![cryzelle](https://user-images.githubusercontent.com/105394703/203482962-f7d647ab-71dd-42dc-bbd9-06f524eaef1b.png)
+
 
 
 
@@ -29,12 +31,23 @@ This project utilizes a lot of different add ons, please make sure you have all 
 
 * [Twilio](https://www.twilio.com/) - Communication tools for making and receiving phone calls, sending and receiving text messages, and performing other communication functions using its web service APIs.
 
+## Run
+
+(https://chorizoburrito.streamlit.app/)
+
 ## Screenshots
+![Flowchart.png](Screenshots/Flowchart.png)
+![Database.png](Screenshots/Database.png)
 ![chorizoburrito.png](Screenshots/chorizoburrito.png)
 ![jollibeechicken.streamlit.png](Screenshots/jollibeechicken.streamlit.png)
 
-
 # Future Upgrades
+Control raw SQL queries into Object Relational Mapper.
+Adding multiple wallet addresses for an account.
+To show all the wallet transactions.
+IOUcoins and loans.
+User friend system.
+Request/Send actionable items from their friends directly.
 
 # Contributors
 
